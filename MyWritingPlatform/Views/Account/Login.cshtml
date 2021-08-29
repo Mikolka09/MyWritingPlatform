@@ -10,22 +10,22 @@
       asp-route-returnUrl="@Model.ReturnUrl">
     <div asp-validation-summary="ModelOnly"></div>
     <div>
-        <label asp-for="Email"></label><br />
-        <input asp-for="Email" />
+        <label class="form-label" asp-for="Email"></label><br />
+        <input class="form-control" asp-for="Email" />
         <span asp-validation-for="Email"></span>
     </div>
     <div>
-        <label asp-for="Password"></label><br />
-        <input asp-for="Password" />
+        <label class="form-label" asp-for="Password"></label><br />
+        <input class="form-control" asp-for="Password" />
         <span asp-validation-for="Password"></span>
     </div>
     <div>
-        <label asp-for="RememberMe"></label><br />
+        <label class="form-check-label" asp-for="RememberMe"></label><br />
         <input asp-for="RememberMe" />
     </div>
     <br />
     <div>
-        <input type="submit" value="Войти" />
+        <input type="submit" class="btn btn-primary" value="Войти" />
     </div>
 </form>
 
