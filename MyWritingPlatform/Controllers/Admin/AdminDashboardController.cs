@@ -10,7 +10,7 @@ namespace MyWritingPlatform.Controllers.Admin
     {
         public IActionResult Index()
         {
-            return View();
+            return View("~/Views/Admin/Index.cshtml");
         }
     }
 }
