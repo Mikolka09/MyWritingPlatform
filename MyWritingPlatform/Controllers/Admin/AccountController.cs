@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyWritingPlatform.Models;
 using MyWritingPlatform.ViewModels;
+using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers.Admin
@@ -11,11 +15,13 @@ namespace MyWritingPlatform.Controllers.Admin
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IWebHostEnvironment _environment;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -26,11 +32,29 @@ namespace MyWritingPlatform.Controllers.Admin
 
 
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model, IFormFile AvatarFile)
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Login = model.Login, Email = model.Email, UserName = model.Email, Year = model.Year };
+                User user = new User { FirstName = model.FirstName, LastName = model.LastName, Login = model.Login, Email = model.Email, 
+                                       UserName = model.Email, Year = model.Year, DateTimeRegister = DateTime.Now };
+
+                #region Обработка изображения
+
+                var wwwRootPath = _environment.WebRootPath; // URL - для сайта
+                var fileName = Path.GetRandomFileName().Replace('.', '_')
+                     + Path.GetExtension(AvatarFile.FileName);
+                var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
+
+                user.Avatar = "/storage/avatars/" + fileName; // ссылка на картинку
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await AvatarFile.CopyToAsync(stream);
+                }
+
+                #endregion
+
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -49,13 +73,13 @@ namespace MyWritingPlatform.Controllers.Admin
                     await emailService.SendEmailAsync(model.Email, "Confirm your account",
                         $"Подтвердите регистрацию на сайте \"My Writing Platform\", перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
 
-                    return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
+                    return Content("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме!");
                 }
                 else
                 {
                     foreach (var error in result.Errors)
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);  
+                        ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
             }

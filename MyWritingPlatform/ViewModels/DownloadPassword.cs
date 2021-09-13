@@ -6,8 +6,8 @@ namespace MyWritingPlatform.ViewModels
 {
     public class DownloadPassword
     {
-        string pathAdmin = @"d:\Users\MIKOLKA\MyWritingPlatform\MyWritingPlatform\passAdmin.txt";
-        string pathSmtp = @"d:\Users\MIKOLKA\MyWritingPlatform\MyWritingPlatform\passSmtp.txt";
+        string pathAdmin = @"d:\Users\MIKOLKA\MyWritingPlatform\MyWritingPlatform\MyWritingPlatform\Admin.txt";
+        string pathSmtp = @"d:\Users\MIKOLKA\MyWritingPlatform\MyWritingPlatform\MyWritingPlatform\Smtp.txt";
         public string[] DeobfuscateAdmin()
         {
             var bytes = Convert.FromBase64String(File.ReadAllText(pathAdmin));
