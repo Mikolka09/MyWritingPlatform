@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Регистрация нового пользователя</h2>
+<h2 style="text-align:center;">Регистрация нового пользователя</h2>
 <hr/>
 <div class="row">
     <div class="col-md-4 offset-md-1">
@@ -17,42 +17,42 @@
             </div>
             <div class="form-group">
                 <label class="form-label" asp-for="FirstName"></label><br />
-                <input class="form-control" asp-for="FirstName" />
+                <input class="form-control" placeholder="Иван" asp-for="FirstName" />
                 <span asp-validation-for="FirstName"></span>
             </div>
             <div class="form-group">
                 <label class="form-label" asp-for="LastName"></label><br />
-                <input class="form-control" asp-for="LastName" />
+                <input class="form-control" placeholder="Иванов" asp-for="LastName" />
                 <span asp-validation-for="LastName"></span>
             </div>
             <div class="form-group">
                 <label class="form-label" asp-for="Login"></label><br />
-                <input class="form-control" asp-for="Login" />
+                <input class="form-control" placeholder="Ivan" asp-for="Login" />
                 <span asp-validation-for="Login"></span>
             </div>
             <div class="form-group">
                 <label class="form-label" asp-for="Email"></label><br />
-                <input class="form-control" asp-for="Email" />
+                <input class="form-control" placeholder="ivan@mail.com" asp-for="Email" />
                 <span asp-validation-for="Email"></span>
             </div>
             <div class="form-group">
                 <label class="form-label" asp-for="Year"></label><br />
-                <input class="form-control" asp-for="Year" />
+                <input class="form-control" placeholder="1988" asp-for="Year" />
                 <span asp-validation-for="Year"></span>
             </div>
             <div class="form-group">
                 <label class="form-label" asp-for="Password"></label><br />
-                <input class="form-control" asp-for="Password" />
+                <input class="form-control" placeholder="_Aa123456" asp-for="Password" />
                 <span asp-validation-for="Password"></span>
             </div>
             <div class="form-group">
                 <label class="form-label" asp-for="PasswordConfirm"></label><br />
-                <input class="form-control" asp-for="PasswordConfirm" />
+                <input class="form-control" placeholder="_Aa123456" asp-for="PasswordConfirm" />
                 <span asp-validation-for="PasswordConfirm"></span>
             </div>
             <br />
             <div>
-                <input type="submit" class="btn btn-primary" value="Регистрация" />
+                <input type="submit" style="border-radius:8px;" class="btn btn-primary" value="Регистрация" />
             </div>
         </form>
     </div>

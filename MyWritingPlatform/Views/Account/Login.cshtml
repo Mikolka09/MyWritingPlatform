@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Вход в приложение</h2>
+<h2 style="text-align:center;">Вход в приложение</h2>
 <hr/>
 <div class="row">
     <div class="col-md-4 offset-md-1">
@@ -14,21 +14,20 @@
             <div asp-validation-summary="ModelOnly"></div>
             <div class="form-group">
                 <label class="form-label" asp-for="Email"></label><br />
-                <input class="form-control" asp-for="Email" />
+                <input class="form-control" placeholder="ivan@mail.com" asp-for="Email" />
                 <span asp-validation-for="Email"></span>
             </div>
             <div class="form-group">
                 <label class="form-label" asp-for="Password"></label><br />
-                <input class="form-control" asp-for="Password" />
+                <input class="form-control" placeholder="_Aa123456" asp-for="Password" />
                 <span asp-validation-for="Password"></span>
             </div>
             <div class="form-group">
                 <label class="form-check-label" asp-for="RememberMe"></label><br />
                 <input asp-for="RememberMe" />
             </div>
-            <br />
             <div>
-                <input type="submit" class="btn btn-primary" value="Войти" />
+                <input type="submit" style="border-radius:8px;" class="btn btn-primary" value="Войти" />
             </div>
         </form>
     </div>

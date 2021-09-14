@@ -1,109 +1,100 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-
-    <!-- Basic Page Needs
-    ================================================== -->
-    <meta charset="utf-8">
-    <title>@ViewData["Title"] - MyWritingPlatform</title>
-
-    <!-- Mobile Specific Metas
-    ================================================== -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-    <!-- CSS
-    ================================================== -->
-    <link rel="stylesheet" href="~/css/zerogrid.css">
-    <link rel="stylesheet" href="~/css/style.css">
-    <link rel="stylesheet" href="~/css/responsive.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>@ViewData["Title"] - MyWritingPlatform<</title>
+    <link rel="icon" type="image/x-icon" href="~/assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/css/styles.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link href='~/image/favicon.ico' rel='icon' type='image/x-icon' />
-
 </head>
 <body>
-    <div class="wrap-body">
-        <!--------------Header--------------->
-        <header>
-            <div class="wrap-header zerogrid">
-                <div id="logo"><a asp-controller="Home" asp-action="Index"><img src="~/image/LogoPlatform.jpg" /></a></div>
-                <nav>
-                    <div class="wrap-nav">
-                        <div class="menu">
-                            <ul>
-                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                                <li><a href="blog.html">Blog</a></li>
-                                <li><a href="blog.html">About</a></li>
-                                <li><a href="https://www.zerotheme.com">Contact</a></li>
-                                <partial name="_LoginPartialUser" />
-                            </ul>
-
-                        </div>
-                    </div>
-                </nav>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <img src="~/image/LogoPlatform.jpg"/>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="post.html">Sample Post</a></li>
+                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="contact.html">Contact</a></li>
+                </ul>
+                <partial name="_LoginPartialUser" />
             </div>
-        </header>
-        <section id="content">
-            <div class="wrap-content zerogrid">
-                @RenderBody()
-            </div>
-        </section>
-        <!--------------Footer--------------->
-        <footer>
-            <div class="wrap-footer zerogrid">
-                <div class="row">
-                    <div class="col-1-3">
-                        <div class="wrap-col">
-                            <div class="box">
-                                <div class="heading"><h4 class="title">Image Gallery</h4></div>
-                                <div class="content gallery">
-                                    <a href="#"><img src="~/image/img5.jpg" width="120" /></a><a href="#"><img src="~/image/img4.jpg" width="120" /></a>
-                                    <a href="#"><img src="~/image/img3.jpg" width="120" /></a><a href="#"><img src="~/image/img2.jpg" width="120" /></a>
-                                    <a href="#"><img src="~/image/img1.jpg" width="120" /></a><a href="#"><img src="~/image/img4.jpg" width="120" /></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-1-3">
-                        <div class="wrap-col">
-                            <div class="box">
-                                <div class="heading"><h4 class="title">About Us</h4></div>
-                                <div class="content">
-                                    <a href="https://www.zerotheme.com" target="_blank"><img src="~/image/zerotheme.png" style="border: 0px; margin: 10px 0;" /></a>
-                                    <p>
-                                        <a href="https://www.zerotheme.com" target="_blank">Free Html5 Templates</a> created by <a href="https://www.zerotheme.com">ZEROTHEME</a>.
-                                        You can use and modify the template for both personal and commercial use. You must keep all copyright information and credit links in the
-                                        template and associated files.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-1-3">
-                        <div class="wrap-col">
-                            <div class="box">
-                                <div class="heading"><h4 class="title">Contact Us</h4></div>
-                                <div class="content">
-                                    <p>Praesent dapibus, neque id cursus faucibus, tortor neque egestas.</p>
-                                    <p>Website : <a href="https://www.zerotheme.com" target="_blank">www.zerotheme.com</a></p>
-                                    <p>+1 (123) 444-5677 <br /> +1 (123) 444-5678</p>
-                                    <p>Address: 123 TemplateAccess Rd1</p>
-                                </div>
-                            </div>
-                        </div>
+        </div>
+    </nav>
+    <!-- Page Header-->
+    <header class="masthead" style="background-image: url('../assets/img/home-bg.jpg')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="site-heading">
+                        <h2>The Writing Platform</h2>
+                        <span class="subheading">A Blog Writing Platform</span>
                     </div>
                 </div>
             </div>
-            <div class="copyright">
-                <p>Copyright © 2012 - Designed by <a href="https://www.zerotheme.com">ZEROTHEME</a></p>
+        </div>
+    </header>
+    @RenderBody()
+    <!-- Footer-->
+    <footer class="border-top">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <ul class="list-inline text-center">
+                        <li class="list-inline-item">
+                            <a href="#!">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fas fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#!">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fas fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="#!">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fas fa-circle fa-stack-2x"></i>
+                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="small text-center text-muted fst-italic">Copyright &copy; My Website 2021</div>
+                </div>
             </div>
-        </footer>
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/css3-mediaqueries.js"></script>
-        <script src="~/js/html5.js"></script>
-        @await RenderSectionAsync("Scripts", required: false)
-    </div>
+        </div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="~/js/scripts.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
