@@ -5,22 +5,35 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<!-- Page Header-->
+<header class="masthead" style="background-image: url('../assets/img/home-bg.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="site-heading">
+                    <h1>The Writing Platform</h1>
+                    <span class="subheading">A Blog Writing Platform</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 <h2 style="text-align:center;">Вход в приложение</h2>
-<hr/>
+<hr />
 <div class="row">
     <div class="col-md-4 offset-md-1">
-        <form method="post" asp-controller="Account" asp-action="Login"
+        <form class="needs-validation" novalidate method="post" asp-controller="Account" asp-action="Login"
               asp-route-returnUrl="@Model.ReturnUrl">
-            <div asp-validation-summary="ModelOnly"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label class="form-label" asp-for="Email"></label><br />
-                <input class="form-control" placeholder="ivan@mail.com" asp-for="Email" />
-                <span asp-validation-for="Email"></span>
+                <input class="form-control" placeholder="ivan@mail.com" asp-for="Email" required />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="form-label" asp-for="Password"></label><br />
-                <input class="form-control" placeholder="_Aa123456" asp-for="Password" />
-                <span asp-validation-for="Password"></span>
+                <input class="form-control" placeholder="_Aa123456" asp-for="Password" required />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label class="form-check-label" asp-for="RememberMe"></label><br />
