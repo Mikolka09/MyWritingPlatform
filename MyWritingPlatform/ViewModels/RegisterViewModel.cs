@@ -5,7 +5,6 @@ namespace MyWritingPlatform.ViewModels
 {
     public class RegisterViewModel
     {
-        [Required]
         [Display(Name = "Аватар")]
         public string Avatar { get; set; }
 

@@ -8,10 +8,10 @@
 
 <div asp-validation-summary="All" class="text-danger"></div>
 
-<form asp-action="Create" method="post">
+<form class="needs-validation" novalidate asp-action="Create" method="post">
     <div class="form-group">
-        <label for="name">Новая роль</label>
-        <input name="name" class="form-control" />
+        <label for="name">Создаем новую роль</label>
+        <input name="name" class="form-control" placeholder="User" required />
     </div>
-    <button type="submit" class="btn btn-primary">Добавить</button>
+    <button type="submit" class="btn btn-primary" style="border-radius:8px;">Добавить</button>
 </form>

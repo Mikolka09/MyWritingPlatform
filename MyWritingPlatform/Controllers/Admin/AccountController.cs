@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using MyWritingPlatform.Models;
 using MyWritingPlatform.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers.Admin
@@ -16,12 +18,14 @@ namespace MyWritingPlatform.Controllers.Admin
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IWebHostEnvironment _environment;
+        RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _environment = environment;
+            _roleManager = roleManager;
         }
 
         [HttpGet]
@@ -36,8 +40,21 @@ namespace MyWritingPlatform.Controllers.Admin
         {
             if (ModelState.IsValid)
             {
-                User user = new User { FirstName = model.FirstName, LastName = model.LastName, Login = model.Login, Email = model.Email, 
-                                       UserName = model.Email, Year = model.Year, DateTimeRegister = DateTime.Now };
+                User user = new User
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Login = model.Login,
+                    Email = model.Email,
+                    UserName = model.Email,
+                    Year = model.Year,
+                    DateTimeRegister = DateTime.Now
+                };
+
+                //назначаем роль User
+                var addRoles = new List<string>();
+                addRoles.Add("User");
+                await _userManager.AddToRolesAsync(user, addRoles);
 
                 #region Обработка изображения
 
@@ -145,7 +162,7 @@ namespace MyWritingPlatform.Controllers.Admin
                 }
                 else
                 {
-                   ModelState.AddModelError("", "Неправильный логин и (или) пароль");
+                    ModelState.AddModelError("", "Неправильный логин и (или) пароль");
                 }
             }
             return View(model);

@@ -34,7 +34,7 @@ namespace MyWritingPlatform.Models
         [Required]
         public bool Censor { get; set; }
 
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
         public Category Category { get; set; }
         public List<Tag> Tags { get; set; }
         public List<Сomment> Сomments { get; set; }

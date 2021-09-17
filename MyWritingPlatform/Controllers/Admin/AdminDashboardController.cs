@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers.Admin
 {
-    [Authorize(Roles = "admin")]
+    //[Authorize(Roles = "admin")]
     public class AdminDashboardController : Controller
     {
         public IActionResult Index()

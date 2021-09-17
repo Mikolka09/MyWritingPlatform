@@ -14,13 +14,13 @@ namespace MyWritingPlatform.ViewModels
             DownloadPassword dp = new DownloadPassword();
             string adminEmail = dp.DeobfuscateAdmin()[0];
             string password = dp.DeobfuscateAdmin()[1];
-            if (await roleManager.FindByNameAsync("admin") == null)
+            if (await roleManager.FindByNameAsync("Admin") == null)
             {
-                await roleManager.CreateAsync(new IdentityRole("admin"));
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
             }
-            if (await roleManager.FindByNameAsync("employee") == null)
+            if (await roleManager.FindByNameAsync("User") == null)
             {
-                await roleManager.CreateAsync(new IdentityRole("employee"));
+                await roleManager.CreateAsync(new IdentityRole("User"));
             }
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
@@ -28,7 +28,7 @@ namespace MyWritingPlatform.ViewModels
                 IdentityResult result = await userManager.CreateAsync(admin, password);
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(admin, "admin");
+                    await userManager.AddToRoleAsync(admin, "Admin");
                 }
             }
         }

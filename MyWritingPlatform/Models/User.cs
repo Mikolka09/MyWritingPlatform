@@ -6,7 +6,6 @@ namespace MyWritingPlatform.Models
 {
     public class User : IdentityUser
     {
-        [Required]
         [Display(Name = "Аватар")]
         public string Avatar { get; set; }
 
@@ -26,9 +25,8 @@ namespace MyWritingPlatform.Models
         [Display(Name = "Год рождения")]
         public int Year { get; set; }
 
-        [Required]
         [DataType(DataType.Date)]
-        [Display(Name = "Дата регестрации")]
+        [Display(Name = "Дата регистрации")]
         public DateTime DateTimeRegister { get; set; }
 
     }
