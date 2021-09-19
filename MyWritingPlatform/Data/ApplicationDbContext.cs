@@ -6,10 +6,10 @@ namespace MyWritingPlatform.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
-        DbSet<Category> Categories { get; set; }
-        DbSet<Post> Posts { get; set; }
-        DbSet<Tag> Tags { get; set; }
-        DbSet<Сomment> Сomments { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Post> Posts { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<Comment> Сomments { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

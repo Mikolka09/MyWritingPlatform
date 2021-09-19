@@ -37,7 +37,7 @@ namespace MyWritingPlatform.Models
         public int? CategoryId { get; set; }
         public Category Category { get; set; }
         public List<Tag> Tags { get; set; }
-        public List<Сomment> Сomments { get; set; }
+        public List<Comment> Сomments { get; set; }
 
 
     }

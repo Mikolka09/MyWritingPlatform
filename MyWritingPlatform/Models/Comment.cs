@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Models
 {
-    public class Сomment
+    public class Comment
     {
         [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
