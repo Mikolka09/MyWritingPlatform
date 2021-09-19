@@ -1,0 +1,67 @@
+﻿@model MyWritingPlatform.Models.User
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<h1 style="text-align:center;">Данные пользователя</h1>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <dl class="row">
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Avatar)
+                </dt>
+                <dd class="col-sm-10">
+                    <img src=@Model.Avatar class="rounded-circle d-block" alt="avatar" style="width: 70px;" />
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Login)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Login)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Year)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Year)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.DateTimeRegister)
+                </dt>
+                <dd class="col-sm-10">
+                    @Model.DateTimeRegister.ToLongDateString()
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+
+
+<div>
+    <a style="margin-left:60px;" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

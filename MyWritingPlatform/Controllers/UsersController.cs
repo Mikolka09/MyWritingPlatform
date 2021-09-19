@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyWritingPlatform.Models;
 using MyWritingPlatform.ViewModels;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,11 +13,13 @@ namespace MyWritingPlatform.Controllers
 {
     public class UsersController : Controller
     {
-        UserManager<User> _userManager;
+        private readonly UserManager<User> _userManager;
+        private readonly IWebHostEnvironment _environment;
 
-        public UsersController(UserManager<User> userManager)
+        public UsersController(UserManager<User> userManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
+            _environment = environment;
         }
 
         public IActionResult Index() => View(_userManager.Users.ToList());
@@ -23,14 +27,42 @@ namespace MyWritingPlatform.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateUserViewModel model)
+        public async Task<IActionResult> Create(RegisterViewModel model, IFormFile AvatarFile)
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year };
+                User user = new User
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Login = model.Login,
+                    Email = model.Email,
+                    UserName = model.Email,
+                    Year = model.Year,
+                    DateTimeRegister = DateTime.Now
+                };
+
+                #region Обработка изображения
+
+                var wwwRootPath = _environment.WebRootPath; // URL - для сайта
+                var fileName = Path.GetRandomFileName().Replace('.', '_')
+                     + Path.GetExtension(AvatarFile.FileName);
+                var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
+
+                user.Avatar = "/storage/avatars/" + fileName; // ссылка на картинку
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await AvatarFile.CopyToAsync(stream);
+                }
+
+                #endregion
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    //назначаем роль User
+                    var addRoles = new string[] { "User" };
                     return RedirectToAction("Index");
                 }
                 else
@@ -51,21 +83,58 @@ namespace MyWritingPlatform.Controllers
             {
                 return NotFound();
             }
-            EditUserViewModel model = new EditUserViewModel { Id = user.Id, Email = user.Email, Year = user.Year };
+            EditUserViewModel model = new EditUserViewModel
+            {
+                Id = user.Id,
+                Avatar = user.Avatar,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Login = user.Login,
+                Email = user.Email,
+                Year = user.Year
+            };
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditUserViewModel model)
+        public async Task<IActionResult> Edit(EditUserViewModel model, IFormFile AvatarFile)
         {
             if (ModelState.IsValid)
             {
                 User user = await _userManager.FindByIdAsync(model.Id);
                 if (user != null)
                 {
-                    user.Email = model.Email;
-                    user.UserName = model.Email;
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.Login = model.Login;
                     user.Year = model.Year;
+
+                    if (user.Email != model.Email)
+                    {
+                        user.Email = model.Email;
+                        user.UserName = model.Email;
+                        user.NormalizedEmail = model.Email.ToUpper();
+                        user.NormalizedUserName = model.Email.ToUpper();
+                    }
+                    if (AvatarFile != null)
+                    {
+
+                        #region Обработка изображения
+
+                        var wwwRootPath = _environment.WebRootPath; // URL - для сайта
+                        var fileName = Path.GetRandomFileName().Replace('.', '_')
+                             + Path.GetExtension(AvatarFile.FileName);
+                        var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
+
+                        user.Avatar = "/storage/avatars/" + fileName; // ссылка на картинку
+
+                        using (var stream = System.IO.File.Create(filePath))
+                        {
+                            await AvatarFile.CopyToAsync(stream);
+                        }
+
+                        #endregion
+                    }
 
                     var result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)

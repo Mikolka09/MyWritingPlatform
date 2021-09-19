@@ -16,7 +16,7 @@ namespace MyWritingPlatform.Controllers.Admin
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IWebHostEnvironment _environment;
-        RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IWebHostEnvironment environment, RoleManager<IdentityRole> roleManager)
         {
