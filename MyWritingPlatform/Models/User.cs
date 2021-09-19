@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyWritingPlatform.Models
@@ -28,6 +29,8 @@ namespace MyWritingPlatform.Models
         [DataType(DataType.Date)]
         [Display(Name = "Дата регистрации")]
         public DateTime DateTimeRegister { get; set; }
+
+        public List<IdentityRole> Roles { get; set; }
 
     }
 }

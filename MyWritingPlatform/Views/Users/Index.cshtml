@@ -5,31 +5,32 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Список пользователей</h2>
-<a asp-action="Create">Добавить пользователя</a>
-
-<table class="table">
-    <tr><th>Аватар</th><th>Имя</th><th>Фамилия</th><th>Логин</th><th>Год рождения</th><th>Email</th><th>Дата регистрации</th><th></th></tr>
-    @foreach (var user in Model)
-    {
-        <tr>
-            <td><img src="@user.Avatar" class="rounded-circle mx-auto d-block" alt="avatar" style="width: 70px;" /></td>
-            <td>@user.FirstName</td>
-            <td>@user.LastName</td>
-            <td>@user.Login</td>
-            <td>@user.Year</td>
-            <td>@user.Email</td>
-            <td>@user.DateTimeRegister.ToLongDateString()</td>
-            <td>
-                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
-                    <a class="btn btn-sm btn-primary" style="border-radius:8px;" asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
-                    <a class="btn btn-sm btn-primary" style="border-radius:8px;" asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
-                    <button type="submit" style="border-radius:8px;" class="btn btn-sm btn-danger">
-                        Удалить
-                    </button>
-                </form>
-            </td>
-        </tr>
-    }
-</table>
+<h2 style="text-align:center;">Список пользователей</h2>
+<div class="col g-4">
+    <a asp-action="Create">Добавить пользователя</a>
+    <table class="table">
+        <tr><th>Аватар</th><th>Имя</th><th>Фамилия</th><th>Логин</th><th>Год рождения</th><th>Email</th><th>Дата регистрации</th><th></th></tr>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td><img src="@user.Avatar" class="rounded-circle mx-auto d-block" alt="avatar" style="width: 70px;" /></td>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.Login</td>
+                <td>@user.Year</td>
+                <td>@user.Email</td>
+                <td>@user.DateTimeRegister.ToLongDateString()</td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                        <a class="btn btn-sm btn-primary" style="border-radius:8px;" asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
+                        <a class="btn btn-sm btn-primary" style="border-radius:8px;" asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
+                        <button type="submit" style="border-radius:8px;" class="btn btn-sm btn-danger">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
 

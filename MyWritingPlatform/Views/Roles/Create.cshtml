@@ -5,13 +5,14 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+<div class="col-md-4 g-4">
+    <div asp-validation-summary="All" class="text-danger"></div>
 
-<div asp-validation-summary="All" class="text-danger"></div>
-
-<form class="needs-validation" novalidate asp-action="Create" method="post">
-    <div class="form-group">
-        <label for="name">Создаем новую роль</label>
-        <input name="name" class="form-control" placeholder="User" required />
-    </div>
-    <button type="submit" class="btn btn-primary" style="border-radius:8px;">Добавить</button>
-</form>
+    <form class="needs-validation" novalidate asp-action="Create" method="post">
+        <div class="form-group">
+            <label for="name">Создаем новую роль</label>
+            <input name="name" class="form-control" placeholder="User" required />
+        </div>
+        <button type="submit" class="btn btn-primary" style="border-radius:8px;">Добавить</button>
+    </form>
+</div>

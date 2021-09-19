@@ -5,21 +5,23 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>Список пользователей</h2>
-<table class="table">
-    <tr><th>Аватар</th><th>Имя</th><th>Фамилия</th><th>Логин</th><th>Год рождения</th><th>Email</th><th></th></tr>
-    @foreach (var user in Model)
-    {
-        <tr>
-            <td><img src="@user.Avatar" class="rounded-circle mx-auto d-block" alt="avatar" style="width: 70px;" /></td>
-            <td>@user.FirstName</td>
-            <td>@user.LastName</td>
-            <td>@user.Login</td>
-            <td>@user.Year</td>
-            <td>@user.Email</td>
-            <td>
-                <a class="btn btn-sm btn-primary" style="border-radius:8px;" asp-action="Edit" asp-route-userid="@user.Id">Права доступа</a>
-            </td>
-        </tr>
-    }
-</table>
+<h2 style="text-align:center;">Список пользователей</h2>
+<div class="col g-4">
+    <table class="table">
+        <tr><th>Аватар</th><th>Имя</th><th>Фамилия</th><th>Логин</th><th>Год рождения</th><th>Email</th><th></th></tr>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td><img src="@user.Avatar" class="rounded-circle mx-auto d-block" alt="avatar" style="width: 70px;" /></td>
+                <td>@user.FirstName</td>
+                <td>@user.LastName</td>
+                <td>@user.Login</td>
+                <td>@user.Year</td>
+                <td>@user.Email</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" style="border-radius:8px;" asp-action="Edit" asp-route-userid="@user.Id">Права доступа</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyWritingPlatform.Models;
 using MyWritingPlatform.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers.Admin
@@ -51,11 +49,6 @@ namespace MyWritingPlatform.Controllers.Admin
                     DateTimeRegister = DateTime.Now
                 };
 
-                //назначаем роль User
-                var addRoles = new List<string>();
-                addRoles.Add("User");
-                await _userManager.AddToRolesAsync(user, addRoles);
-
                 #region Обработка изображения
 
                 var wwwRootPath = _environment.WebRootPath; // URL - для сайта
@@ -76,6 +69,10 @@ namespace MyWritingPlatform.Controllers.Admin
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    //назначаем роль User
+                    var addRoles = new string[] { "User" };
+                    await _userManager.AddToRolesAsync(user, addRoles);
+
                     //// установка куки
                     //await _signInManager.SignInAsync(user, false);
                     //return RedirectToAction("Index", "Home");

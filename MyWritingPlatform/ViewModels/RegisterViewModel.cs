@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyWritingPlatform.ViewModels
@@ -30,7 +32,7 @@ namespace MyWritingPlatform.ViewModels
         public int Year { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "Пароль должен быть не менее 6 символов", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "Поле {0} должно иметь минимум {2} и максимум {1} символов.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
@@ -42,5 +44,7 @@ namespace MyWritingPlatform.ViewModels
         public string PasswordConfirm { get; set; }
 
         public DateTime DateTimeRegister { get; set; }
+        public List<IdentityRole> Roles { get; set; }
+
     }
 }

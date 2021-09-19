@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyWritingPlatform.Data;
 
-namespace MyWritingPlatform.Data.Migrations
+namespace MyWritingPlatform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -36,12 +36,17 @@ namespace MyWritingPlatform.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetRoles");
                 });
@@ -242,7 +247,6 @@ namespace MyWritingPlatform.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Avatar")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -337,17 +341,14 @@ namespace MyWritingPlatform.Data.Migrations
                     b.Property<DateTime>("Published")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Сomments");
                 });
@@ -365,6 +366,13 @@ namespace MyWritingPlatform.Data.Migrations
                     b.HasIndex("TagsId");
 
                     b.ToTable("PostTag");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.HasOne("MyWritingPlatform.Models.User", null)
+                        .WithMany("Roles")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -435,7 +443,7 @@ namespace MyWritingPlatform.Data.Migrations
 
                     b.HasOne("MyWritingPlatform.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Post");
 
@@ -465,6 +473,11 @@ namespace MyWritingPlatform.Data.Migrations
             modelBuilder.Entity("MyWritingPlatform.Models.Post", b =>
                 {
                     b.Navigation("Сomments");
+                });
+
+            modelBuilder.Entity("MyWritingPlatform.Models.User", b =>
+                {
+                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

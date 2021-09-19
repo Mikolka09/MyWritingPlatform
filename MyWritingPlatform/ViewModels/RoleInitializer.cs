@@ -24,8 +24,20 @@ namespace MyWritingPlatform.ViewModels
             }
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
-                User admin = new User { Email = adminEmail, UserName = adminEmail };
-                IdentityResult result = await userManager.CreateAsync(admin, password);
+                User admin = new User
+                {
+                    Avatar = "/storage/avatars/admin3191274.png",
+                    FirstName = "Админ",
+                    LastName = "Админ",
+                    Login = "Admin",
+                    Email = adminEmail,
+                    UserName = adminEmail,
+                    EmailConfirmed = true,
+                    Year = 2000,
+                    DateTimeRegister = DateTime.Now
+                };
+              
+                var result = await userManager.CreateAsync(admin, password);
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(admin, "Admin");
