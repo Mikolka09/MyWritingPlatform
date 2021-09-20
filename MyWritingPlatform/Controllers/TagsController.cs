@@ -22,7 +22,8 @@ namespace MyWritingPlatform.Controllers
         // GET: Tags
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tags.ToListAsync());
+            var applicationDbContext = _context.Tags.Include(t => t.User);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Tags/Details/5
@@ -34,6 +35,7 @@ namespace MyWritingPlatform.Controllers
             }
 
             var tag = await _context.Tags
+                .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {
@@ -46,6 +48,7 @@ namespace MyWritingPlatform.Controllers
         // GET: Tags/Create
         public IActionResult Create()
         {
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Tag tag)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,UserId")] Tag tag)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace MyWritingPlatform.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", tag.UserId);
             return View(tag);
         }
 
@@ -78,6 +82,7 @@ namespace MyWritingPlatform.Controllers
             {
                 return NotFound();
             }
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", tag.UserId);
             return View(tag);
         }
 
@@ -86,7 +91,7 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Tag tag)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,UserId")] Tag tag)
         {
             if (id != tag.Id)
             {
@@ -113,6 +118,7 @@ namespace MyWritingPlatform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", tag.UserId);
             return View(tag);
         }
 
@@ -125,6 +131,7 @@ namespace MyWritingPlatform.Controllers
             }
 
             var tag = await _context.Tags
+                .Include(t => t.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {

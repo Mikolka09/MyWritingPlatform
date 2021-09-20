@@ -10,7 +10,6 @@ namespace MyWritingPlatform.Models
         [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
 
-        [Required]
         [Display(Name = "Картинка")]
         public string ImgPost { get; set; }
 
@@ -32,8 +31,12 @@ namespace MyWritingPlatform.Models
         public DateTime Published { get; set; }
 
         [Required]
+        [Display(Name = "Цензура")]
         public bool Censor { get; set; }
 
+        [Display(Name = "Категория")]
+        public string UserId { get; set; }
+        public User User { get; set; }
         public int? CategoryId { get; set; }
         public Category Category { get; set; }
         public List<Tag> Tags { get; set; }
