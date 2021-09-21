@@ -1,28 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyWritingPlatform.Data;
 using MyWritingPlatform.Models;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers
 {
     public class PostsController : Controller
     {
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public PostsController(ApplicationDbContext context)
+        public PostsController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext context, IWebHostEnvironment environment)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
             _context = context;
+            _environment = environment;
         }
 
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Posts.Include(p => p.Category).Include(p => p.User);
+            var currentUser = await _userManager.GetUserAsync(User);
+            var applicationDbContext = _context.Posts.Include(p => p.Category).Include(p => p.User).Where(p => p.UserId == currentUser.Id);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -49,8 +59,8 @@ namespace MyWritingPlatform.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login");
             return View();
         }
 
@@ -59,16 +69,35 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,UserId,CategoryId")] Post post)
+        public async Task<IActionResult> Create([Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,UserId,CategoryId")] Post post, IFormFile ImgPostFile)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+            post.Published = DateTime.Now;
+            post.Censor = false;
+            post.UserId = currentUser.Id;
             if (ModelState.IsValid)
             {
+                #region Обработка изображения
+
+                var wwwRootPath = _environment.WebRootPath; // URL - для сайта
+                var fileName = Path.GetRandomFileName().Replace('.', '_')
+                     + Path.GetExtension(ImgPostFile.FileName);
+                var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
+
+                post.ImgPost = "/storage/avatars/" + fileName; // ссылка на картинку
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await ImgPostFile.CopyToAsync(stream);
+                }
+
+                #endregion
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description", post.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", post.UserId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", post.UserId);
             return View(post);
         }
 
@@ -85,8 +114,8 @@ namespace MyWritingPlatform.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description", post.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", post.UserId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", post.UserId);
             return View(post);
         }
 
@@ -95,15 +124,40 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,UserId,CategoryId")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,UserId,CategoryId")] Post post, IFormFile ImgPostFile)
         {
             if (id != post.Id)
             {
                 return NotFound();
             }
 
+            Post oldPost = _context.Posts.FirstOrDefault(p => p.Id == post.Id);
+            post.Published = oldPost.Published;
+            post.Censor = oldPost.Censor;
+            post.UserId = oldPost.UserId;
+
             if (ModelState.IsValid)
             {
+                if (ImgPostFile != null)
+                {
+
+                    #region Обработка изображения
+
+                    var wwwRootPath = _environment.WebRootPath; // URL - для сайта
+                    var fileName = Path.GetRandomFileName().Replace('.', '_')
+                         + Path.GetExtension(ImgPostFile.FileName);
+                    var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
+
+                    post.ImgPost = "/storage/avatars/" + fileName; // ссылка на картинку
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await ImgPostFile.CopyToAsync(stream);
+                    }
+
+                    #endregion
+                }
+
                 try
                 {
                     _context.Update(post);
@@ -122,8 +176,8 @@ namespace MyWritingPlatform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description", post.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", post.UserId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", post.UserId);
             return View(post);
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,18 +13,31 @@ namespace MyWritingPlatform.Controllers
 {
     public class CommentsController : Controller
     {
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly ApplicationDbContext _context;
 
-        public CommentsController(ApplicationDbContext context)
+        public CommentsController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext context)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
             _context = context;
         }
 
         // GET: Comments
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Сomments.Include(c => c.Post).Include(c => c.User);
-            return View(await applicationDbContext.ToListAsync());
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser.Login == "Admin")
+            {
+                var applicationDbContext = _context.Сomments.Include(c => c.Post).Include(c => c.User);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                var applicationDbContext = _context.Сomments.Include(c => c.Post).Include(c => c.User).Where(p => p.UserId == currentUser.Id); ;
+                return View(await applicationDbContext.ToListAsync());
+            }
         }
 
         // GET: Comments/Details/5
@@ -49,8 +63,8 @@ namespace MyWritingPlatform.Controllers
         // GET: Comments/Create
         public IActionResult Create()
         {
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Description");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Title");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login");
             return View();
         }
 
@@ -67,8 +81,8 @@ namespace MyWritingPlatform.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Description", comment.PostId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", comment.UserId);
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Title", comment.PostId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", comment.UserId);
             return View(comment);
         }
 
@@ -85,8 +99,8 @@ namespace MyWritingPlatform.Controllers
             {
                 return NotFound();
             }
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Description", comment.PostId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", comment.UserId);
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Title", comment.PostId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", comment.UserId);
             return View(comment);
         }
 
@@ -122,8 +136,8 @@ namespace MyWritingPlatform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Description", comment.PostId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", comment.UserId);
+            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Title", comment.PostId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", comment.UserId);
             return View(comment);
         }
 

@@ -5,18 +5,18 @@
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 
-<h1>Edit</h1>
+<h1 style="text-align:center;">Редактирование публикации</h1>
 
-<h4>Post</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-10 offset-sm-1">
+        <form class="needs-validation" novalidate asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="ImgPost" class="control-label"></label>
-                <input asp-for="ImgPost" class="form-control" />
+                <img src=@Model.ImgPost class="rounded-circle d-block" style="width:70px;" />
+                <input class="form-control" name="ImgPostFile" type="file" />
                 <span asp-validation-for="ImgPost" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -31,23 +31,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
+                <textarea asp-for="Description" class="form-control" style="height: 150px"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Published" class="control-label"></label>
-                <input asp-for="Published" class="form-control" />
-                <span asp-validation-for="Published" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Censor" /> @Html.DisplayNameFor(model => model.Censor)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId" class="control-label"></label>
@@ -55,13 +40,13 @@
                 <span asp-validation-for="CategoryId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" style="border-radius:8px;" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a style="margin-left:40px;" asp-action="Index">Back to List</a>
 </div>
 
