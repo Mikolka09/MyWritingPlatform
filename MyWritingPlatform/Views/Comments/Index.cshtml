@@ -2,7 +2,11 @@
 
 @{
     ViewData["Title"] = "Index";
-    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    var user = await UserManager.GetUserAsync(User);
+    if (user.Login == "Admin")
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    else
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 
 <h1 style="text-align:center;">Список комментарий</h1>
@@ -18,10 +22,10 @@
                     @Html.DisplayNameFor(model => model.Published)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.User)
+                    @Html.DisplayNameFor(model => model.User.Login)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Post)
+                    @Html.DisplayNameFor(model => model.Post.Title)
                 </th>
                 <th></th>
             </tr>

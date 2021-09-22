@@ -32,7 +32,7 @@ namespace MyWritingPlatform.Controllers
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            var applicationDbContext = _context.Posts.Include(p => p.Category).Include(p => p.User).Where(p => p.UserId == currentUser.Id);
+            var applicationDbContext = _context.Posts.Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).Where(p => p.User.Id == currentUser.Id);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -46,6 +46,7 @@ namespace MyWritingPlatform.Controllers
 
             var post = await _context.Posts
                 .Include(p => p.Category)
+                .Include(p => p.Tags)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (post == null)
@@ -60,7 +61,7 @@ namespace MyWritingPlatform.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login");
+            ViewData["Tags"] = new SelectList(_context.Tags, "Id", "Name");
             return View();
         }
 
@@ -69,12 +70,12 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,UserId,CategoryId")] Post post, IFormFile ImgPostFile)
+        public async Task<IActionResult> Create([Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,CategoryId")] Post post, int[] tags, IFormFile ImgPostFile)
         {
             var currentUser = await _userManager.GetUserAsync(User);
             post.Published = DateTime.Now;
             post.Censor = false;
-            post.UserId = currentUser.Id;
+            post.User = await _context.Users.FirstOrDefaultAsync(p => p.Id == currentUser.Id);
             if (ModelState.IsValid)
             {
                 #region Обработка изображения
@@ -92,12 +93,13 @@ namespace MyWritingPlatform.Controllers
                 }
 
                 #endregion
+                post.Tags = _context.Tags.Where(t => tags.Contains(t.Id)).ToList();
                 _context.Add(post);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", post.UserId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewData["Tags"] = new SelectList(_context.Tags, "Id", "Name");
             return View(post);
         }
 
@@ -114,8 +116,7 @@ namespace MyWritingPlatform.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", post.UserId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description", post.CategoryId);
             return View(post);
         }
 
@@ -124,40 +125,15 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,UserId,CategoryId")] Post post, IFormFile ImgPostFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,CategoryId")] Post post)
         {
             if (id != post.Id)
             {
                 return NotFound();
             }
 
-            Post oldPost = _context.Posts.FirstOrDefault(p => p.Id == post.Id);
-            post.Published = oldPost.Published;
-            post.Censor = oldPost.Censor;
-            post.UserId = oldPost.UserId;
-
             if (ModelState.IsValid)
             {
-                if (ImgPostFile != null)
-                {
-
-                    #region Обработка изображения
-
-                    var wwwRootPath = _environment.WebRootPath; // URL - для сайта
-                    var fileName = Path.GetRandomFileName().Replace('.', '_')
-                         + Path.GetExtension(ImgPostFile.FileName);
-                    var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
-
-                    post.ImgPost = "/storage/avatars/" + fileName; // ссылка на картинку
-
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await ImgPostFile.CopyToAsync(stream);
-                    }
-
-                    #endregion
-                }
-
                 try
                 {
                     _context.Update(post);
@@ -176,8 +152,7 @@ namespace MyWritingPlatform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", post.UserId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description", post.CategoryId);
             return View(post);
         }
 
@@ -191,6 +166,7 @@ namespace MyWritingPlatform.Controllers
 
             var post = await _context.Posts
                 .Include(p => p.Category)
+                .Include(p => p.Tags)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (post == null)

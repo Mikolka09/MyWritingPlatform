@@ -10,8 +10,8 @@ using MyWritingPlatform.Data;
 namespace MyWritingPlatform.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210920205941_NewPlatform")]
-    partial class NewPlatform
+    [Migration("20210922160656_Platform-2")]
+    partial class Platform2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -376,7 +376,7 @@ namespace MyWritingPlatform.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("PostTag");
+                    b.ToTable("PivotPostTag");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

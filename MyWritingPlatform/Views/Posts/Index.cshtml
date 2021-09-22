@@ -3,14 +3,15 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    var k = 0;
 }
 
 <h1 style="text-align:center;">Список публикаций</h1>
 <div class="col g-4">
     <p>
-        <a asp-action="Create">Создать новую публикацию</a>
+        <a class="btn btn-success btn-sm" style="border-radius:6px;" asp-action="Create">Создать новую публикацию</a>
     </p>
-    <table class="table">
+    <table class="table table-striped table-success table-hover">
         <thead>
             <tr>
                 <th>
@@ -29,10 +30,13 @@
                     @Html.DisplayNameFor(model => model.Censor)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.User)
+                    @Html.DisplayNameFor(model => model.Category)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Category)
+                    @Html.DisplayNameFor(model => model.User.Login)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tags)
                 </th>
                 <th></th>
             </tr>
@@ -57,15 +61,23 @@
                         @((item.Censor==false)? "Не проверена!": "Проверена!")
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.User.Login)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => item.Category.Name)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        @Html.DisplayFor(modelItem => item.User.Login)
+                    </td>
+                    <td>
+                        <select class="form-select" required aria-label="select example">
+                            @foreach (var it in item.Tags)
+                            {
+                                <option value="@k++">@it.Name</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" style="border-radius:6px;" asp-action="Edit" asp-route-id="@item.Id">Edit</a>  
+                        <a class="btn btn-primary btn-sm" style="border-radius:6px;"asp-action="Details" asp-route-id="@item.Id">Details</a>  
+                        <a class="btn btn-danger btn-sm" style="border-radius:6px;" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                     </td>
                 </tr>
             }

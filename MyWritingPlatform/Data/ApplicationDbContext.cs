@@ -10,10 +10,24 @@ namespace MyWritingPlatform.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Comment> Сomments { get; set; }
+        protected void OnModelCreatingPost(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Post>()
+                    .HasMany(c => c.Tags)
+                    .WithMany(s => s.Posts)
+                    .UsingEntity(j => j.ToTable("PivotPostTag"));
+        }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+
+            public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            OnModelCreatingPost(modelBuilder);
         }
     }
 }

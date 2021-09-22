@@ -2,7 +2,11 @@
 
 @{
     ViewData["Title"] = "Delete";
-    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+    var user = await UserManager.GetUserAsync(User);
+    if (user.Login == "Admin")
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    else
+        Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 
 <h1 style="text-align:center;">Удаление комментария</h1>
@@ -26,13 +30,13 @@
                     @Model.Published.ToLongDateString()
                 </dd>
                 <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.User)
+                    @Html.DisplayNameFor(model => model.User.Login)
                 </dt>
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.User.Login)
                 </dd>
                 <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Post)
+                    @Html.DisplayNameFor(model => model.Post.Title)
                 </dt>
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.Post.Title)
@@ -41,7 +45,7 @@
 
             <form asp-action="Delete">
                 <input type="hidden" asp-for="Id" />
-                <input type="submit" value="Delete" class="btn btn-danger" /> |
+                <input type="submit" style="border-radius:8px;" value="Delete" class="btn btn-danger" /> |
                 <a asp-action="Index">Back to List</a>
             </form>
         </div>

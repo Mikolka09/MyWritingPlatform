@@ -20,9 +20,10 @@ namespace MyWritingPlatform.Models
         [Display(Name = "Описание")]
         public string Description { get; set; }
 
-        public string UserId { get; set; }
+        [Display(Name = "Пользователь")]
         public User User { get; set; }
 
+        [Display(Name = "Заголовки")]
         public List<Post> Posts { get; set; }
     }
 }

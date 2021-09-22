@@ -34,11 +34,15 @@ namespace MyWritingPlatform.Models
         [Display(Name = "Цензура")]
         public bool Censor { get; set; }
 
-        [Display(Name = "Категория")]
-        public string UserId { get; set; }
         public User User { get; set; }
+
+        [Display(Name = "Категория")]
         public int? CategoryId { get; set; }
+
+        [Display(Name = "Категория")]
         public Category Category { get; set; }
+
+        [Display(Name = "Теги")]
         public List<Tag> Tags { get; set; }
         public List<Comment> Сomments { get; set; }
 

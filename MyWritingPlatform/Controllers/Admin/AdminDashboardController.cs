@@ -73,7 +73,7 @@ namespace MyWritingPlatform.Controllers.Admin
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", post.UserId);
+            
             return View(post);
         }
 
@@ -91,7 +91,7 @@ namespace MyWritingPlatform.Controllers.Admin
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", post.UserId);
+         
             return View(post);
         }
 
@@ -148,7 +148,7 @@ namespace MyWritingPlatform.Controllers.Admin
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", post.UserId);
+       
             return View(post);
         }
         private bool PostExists(int id)

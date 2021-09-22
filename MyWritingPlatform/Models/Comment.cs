@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Models
 {
@@ -21,9 +18,8 @@ namespace MyWritingPlatform.Models
         [Display(Name = "Дата публикации")]
         public DateTime Published { get; set; }
 
-        public string UserId { get; set; }
         public User User { get; set; }
-        public int? PostId { get; set; }
+
         public Post Post { get; set; }
     }
 }

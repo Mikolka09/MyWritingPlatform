@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,18 +13,31 @@ namespace MyWritingPlatform.Controllers
 {
     public class TagsController : Controller
     {
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly ApplicationDbContext _context;
 
-        public TagsController(ApplicationDbContext context)
+        public TagsController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext context)
         {
+            _userManager = userManager;
+            _signInManager = signInManager;
             _context = context;
         }
 
         // GET: Tags
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Tags.Include(t => t.User);
-            return View(await applicationDbContext.ToListAsync());
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser.Login == "Admin")
+            {
+                var applicationDbContext = _context.Tags.Include(c => c.User);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                var applicationDbContext = _context.Tags.Include(c => c.User).Where(p => p.User.Id == currentUser.Id); ;
+                return View(await applicationDbContext.ToListAsync());
+            }
         }
 
         // GET: Tags/Details/5
@@ -35,7 +49,8 @@ namespace MyWritingPlatform.Controllers
             }
 
             var tag = await _context.Tags
-                .Include(t => t.User)
+                .Include(t=>t.User)
+                .Include(t=>t.Posts)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {
@@ -48,7 +63,6 @@ namespace MyWritingPlatform.Controllers
         // GET: Tags/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -57,15 +71,18 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,UserId")] Tag tag)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Tag tag, int[] posts)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
+            tag.User = await _context.Users.FirstOrDefaultAsync(p => p.Id == currentUser.Id);
+
             if (ModelState.IsValid)
             {
+                tag.Posts = _context.Posts.Where(t => posts.Contains(t.Id)).ToList();
                 _context.Add(tag);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", tag.UserId);
             return View(tag);
         }
 
@@ -82,7 +99,6 @@ namespace MyWritingPlatform.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", tag.UserId);
             return View(tag);
         }
 
@@ -91,7 +107,7 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,UserId")] Tag tag)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Tag tag)
         {
             if (id != tag.Id)
             {
@@ -118,7 +134,6 @@ namespace MyWritingPlatform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", tag.UserId);
             return View(tag);
         }
 
@@ -132,6 +147,7 @@ namespace MyWritingPlatform.Controllers
 
             var tag = await _context.Tags
                 .Include(t => t.User)
+                .Include(t => t.Posts)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {

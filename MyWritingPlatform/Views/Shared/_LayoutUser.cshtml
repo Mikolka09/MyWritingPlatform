@@ -1,8 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity;
-@using MyWritingPlatform.Models;
-@inject SignInManager<User> SignInManager
-@inject UserManager<User> UserManager
-
+﻿
 @{
     var user = await UserManager.GetUserAsync(User);
 }

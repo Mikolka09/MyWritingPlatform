@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyWritingPlatform.Data;
 using MyWritingPlatform.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers
 {
@@ -35,7 +32,7 @@ namespace MyWritingPlatform.Controllers
             }
             else
             {
-                var applicationDbContext = _context.Сomments.Include(c => c.Post).Include(c => c.User).Where(p => p.UserId == currentUser.Id); ;
+                var applicationDbContext = _context.Сomments.Include(c => c.Post).Include(c => c.User).Where(p => p.User.Id == currentUser.Id); ;
                 return View(await applicationDbContext.ToListAsync());
             }
         }
@@ -63,8 +60,6 @@ namespace MyWritingPlatform.Controllers
         // GET: Comments/Create
         public IActionResult Create()
         {
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Title");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login");
             return View();
         }
 
@@ -73,7 +68,7 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Description,Published,UserId,PostId")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,Description,Published")] Comment comment)
         {
             if (ModelState.IsValid)
             {
@@ -81,8 +76,6 @@ namespace MyWritingPlatform.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Title", comment.PostId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", comment.UserId);
             return View(comment);
         }
 
@@ -99,8 +92,6 @@ namespace MyWritingPlatform.Controllers
             {
                 return NotFound();
             }
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Title", comment.PostId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", comment.UserId);
             return View(comment);
         }
 
@@ -109,13 +100,14 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,Published,UserId,PostId")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Description,Published")] Comment comment)
         {
             if (id != comment.Id)
             {
                 return NotFound();
             }
 
+            comment.Published = _context.Сomments.FirstOrDefault(p => p.Id == id).Published;
             if (ModelState.IsValid)
             {
                 try
@@ -136,8 +128,6 @@ namespace MyWritingPlatform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Title", comment.PostId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Login", comment.UserId);
             return View(comment);
         }
 
