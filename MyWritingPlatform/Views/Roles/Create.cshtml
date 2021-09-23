@@ -5,6 +5,8 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
+<h2 style="text-align:center;">Создание роли</h2>
+<hr />
 <div class="col-md-4 g-4">
     <div asp-validation-summary="All" class="text-danger"></div>
 
@@ -16,7 +18,7 @@
         <button type="submit" class="btn btn-primary" style="border-radius:8px;">Добавить</button>
     </form>
 </div>
-
+<br />
 <div>
-    <a asp-action="Index" style="margin-left:10px;">Back to List</a>
+    <a style="margin-left: 10px; border-radius: 6px;" class="btn btn-info btn-sm" asp-action="Index">Back to List</a>
 </div>

@@ -106,17 +106,20 @@ namespace MyWritingPlatform.Controllers
         // GET: Posts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var currentUser = await _userManager.GetUserAsync(User);
             if (id == null)
             {
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
+            //var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).FirstOrDefaultAsync(p=>p.Id==id);
             if (post == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description", post.CategoryId);
+            ViewData["Tags"] = new SelectList(_context.Tags, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
             return View(post);
         }
 
@@ -125,17 +128,47 @@ namespace MyWritingPlatform.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,CategoryId")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,CategoryId")] Post post, int[] tags, IFormFile ImgPostFile)
         {
             if (id != post.Id)
             {
                 return NotFound();
             }
 
+            Post oldPost = _context.Posts.Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).FirstOrDefault(p => p.Id == post.Id);
+            post.Published = oldPost.Published;
+            post.Censor = oldPost.Censor;
+            post.Category = oldPost.Category;
+            post.User = oldPost.User;
+            
             if (ModelState.IsValid)
             {
+                if (ImgPostFile != null)
+                {
+
+                    #region Обработка изображения
+
+                    var wwwRootPath = _environment.WebRootPath; // URL - для сайта
+                    var fileName = Path.GetRandomFileName().Replace('.', '_')
+                         + Path.GetExtension(ImgPostFile.FileName);
+                    var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
+
+                    post.ImgPost = "/storage/avatars/" + fileName; // ссылка на картинку
+
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        await ImgPostFile.CopyToAsync(stream);
+                    }
+
+                    #endregion
+                }
+                else
+                    post.ImgPost = oldPost.ImgPost;
+                
                 try
                 {
+                    post.Tags = _context.Tags.Where(t => tags.Contains(t.Id)).ToList();
+                    _context.Entry(oldPost).State = EntityState.Detached;
                     _context.Update(post);
                     await _context.SaveChangesAsync();
                 }
@@ -152,7 +185,8 @@ namespace MyWritingPlatform.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description", post.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", post.CategoryId);
+            ViewData["Tags"] = new SelectList(_context.Tags, "Id", "Name");
             return View(post);
         }
 

@@ -11,7 +11,7 @@
 <div>
     <hr />
     <div class="row">
-        <div class="col-md-4 offset-md-1">
+        <div class="col-md-6 offset-md-1">
             <dl class="row">
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Name)
@@ -29,8 +29,8 @@
 
             <form asp-action="Delete">
                 <input type="hidden" asp-for="Id" />
-                <input type="submit" style="border-radius:8px;" value="Delete" class="btn btn-danger" /> |
-                <a asp-action="Index">Back to List</a>
+                <input type="submit" style="border-radius:8px;" value="Delete" class="btn btn-danger" />  
+                <a class="btn btn-info btn-sm" style="border-radius:6px;" asp-action="Index">Back to List</a>
             </form>
         </div>
     </div>

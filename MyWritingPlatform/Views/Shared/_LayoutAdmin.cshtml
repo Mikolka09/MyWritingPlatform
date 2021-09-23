@@ -47,10 +47,10 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a asp-controller="AdminDashboard" asp-action="Index" class="nav-link">Home</a>
+                    <a asp-controller="AdminDashboard" asp-action="Index" class="nav-link">HomeAdmin</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
+                    <a asp-controller="Home" asp-action="Index" class="nav-link">HomePage</a>
                 </li>
             </ul>
 
@@ -252,17 +252,17 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a asp-controller="Posts" asp-action="CreatePost" class="nav-link">
+                                    <a asp-controller="AdminDashboard" asp-action="CreatePost" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Create Post</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                @*<li class="nav-item">
                                     <a asp-controller="AdminDashboard" asp-action="EditPost" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Edit Post</p>
                                     </a>
-                                </li>
+                                </li>*@
                             </ul>
                         </li>
                         <li class="nav-item">

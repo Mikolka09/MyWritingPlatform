@@ -10,7 +10,7 @@
 <div>
     <hr />
     <div class="row">
-        <div class="col-md-4 offset-md-1">
+        <div class="col-md-6 offset-md-1">
             <dl class="row">
                 <dt class="col-sm-2">
                     @Html.DisplayNameFor(model => model.Name)
@@ -26,8 +26,8 @@
                 </dd>
             </dl>
             <div>
-                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-                <a asp-action="Index">Back to List</a>
+                <a class="btn btn-primary btn-sm" style="border-radius:6px;" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>  
+                <a class="btn btn-info btn-sm" style="border-radius:6px;" asp-action="Index">Back to List</a>
             </div>
         </div>
     </div>

@@ -5,58 +5,56 @@
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 
-<h1>Edit</h1>
+<h1 style="text-align:center;">Редактирование публикации</h1>
 
-<h4>Post</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="ImgPost" class="control-label"></label>
-                <input asp-for="ImgPost" class="form-control" />
-                <span asp-validation-for="ImgPost" class="text-danger"></span>
+<div class="container">
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="ImgPost" class="control-label"></label>
+                    <img src=@Model.ImgPost class="rounded-circle d-block" style="width:70px;" />
+                    <input class="form-control" name="ImgPostFile" type="file" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ShortDescription" class="control-label"></label>
+                    <textarea asp-for="ShortDescription" class="form-control"></textarea>
+                    <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="control-label"></label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tags" class="control-label"></label>
+                    <select asp-for="Tags" class="form-control" asp-items="ViewBag.Tags" multiple></select>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+            <div class="col">
+                <div class="form-group navbar-nav navbar-nav-scroll">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" style="height: 450px"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ShortDescription" class="control-label"></label>
-                <input asp-for="ShortDescription" class="form-control" />
-                <span asp-validation-for="ShortDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Published" class="control-label"></label>
-                <input asp-for="Published" class="form-control" />
-                <span asp-validation-for="Published" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Censor" /> @Html.DisplayNameFor(model => model.Censor)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" style="border-radius:8px;" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
 
+<br />
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a style="margin-left: 40px; border-radius: 6px;" class="btn btn-info btn-sm" asp-action="Index">Back to List</a>
 </div>
 

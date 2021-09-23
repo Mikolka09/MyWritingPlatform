@@ -47,10 +47,10 @@
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a asp-controller="UserDashboard" asp-action="Index" class="nav-link">Home</a>
+                    <a asp-controller="UserDashboard" asp-action="Index" class="nav-link">HomeUser</a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
-                    <a href="#" class="nav-link">Contact</a>
+                    <a asp-controller="Home" asp-action="Index" class="nav-link">HomePage</a>
                 </li>
             </ul>
 
@@ -236,14 +236,14 @@
                                         <p>Edit User</p>
                                     </a>
                                 </li>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a asp-controller="UserDashboard" asp-action="ChangePassword" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Change Pass</p>
-                                        </a>
-                                    </li>
-                                </ul>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a asp-controller="UserDashboard" asp-action="ChangePassword" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Change Pass</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -267,12 +267,12 @@
                                         <p>Create Post</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a asp-controller="Posts" asp-action="Edit" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Edit Post</p>
-                                    </a>
-                                </li>
+                                @*<li class="nav-item">
+                                        <a asp-controller="Posts" asp-action="Edit" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Edit Post</p>
+                                        </a>
+                                    </li>*@
                             </ul>
                         </li>
                         <li class="nav-item">
