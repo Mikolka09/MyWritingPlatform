@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyWritingPlatform.Data;
 using MyWritingPlatform.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers
 {
@@ -30,12 +29,12 @@ namespace MyWritingPlatform.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser.Login == "Admin")
             {
-                var applicationDbContext = _context.Tags.Include(c => c.User);
+                var applicationDbContext = _context.Tags.Include(c => c.User).Include(c => c.Posts);
                 return View(await applicationDbContext.ToListAsync());
             }
             else
             {
-                var applicationDbContext = _context.Tags.Include(c => c.User).Where(p => p.User.Id == currentUser.Id); ;
+                var applicationDbContext = _context.Tags.Include(c => c.Posts).Include(c => c.User).Where(p => p.User.Id == currentUser.Id); ;
                 return View(await applicationDbContext.ToListAsync());
             }
         }
@@ -49,8 +48,8 @@ namespace MyWritingPlatform.Controllers
             }
 
             var tag = await _context.Tags
-                .Include(t=>t.User)
-                .Include(t=>t.Posts)
+                .Include(t => t.User)
+                .Include(t => t.Posts)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (tag == null)
             {
@@ -94,7 +93,7 @@ namespace MyWritingPlatform.Controllers
                 return NotFound();
             }
 
-            var tag = await _context.Tags.FindAsync(id);
+            var tag = await _context.Tags.Include(c => c.Posts).Include(c => c.User).FirstOrDefaultAsync(t => t.Id == id);
             if (tag == null)
             {
                 return NotFound();
@@ -113,6 +112,18 @@ namespace MyWritingPlatform.Controllers
             {
                 return NotFound();
             }
+            var oldTag = _context.Tags.Include(c => c.Posts).Include(c => c.User).FirstOrDefault(t => t.Id == id);
+            tag.User = oldTag.User;
+            tag.Posts = oldTag.Posts;
+
+            string oldName = tag.Name;
+            string oldDes = tag.Description;
+            _context.Entry(tag).State = EntityState.Detached;
+            await _context.SaveChangesAsync();
+            tag = _context.Tags.Where(p => p.Id == id).Include(c => c.Posts).Include(c => c.User).First();
+            //List<Post> oldPosts = tag.Posts;
+            tag.Name = oldName;
+            tag.Description = oldDes;
 
             if (ModelState.IsValid)
             {

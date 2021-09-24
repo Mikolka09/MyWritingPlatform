@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyWritingPlatform.Data;
 using MyWritingPlatform.Models;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -108,7 +109,7 @@ namespace MyWritingPlatform.Controllers.Admin
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).FirstOrDefaultAsync(p => p.Id == id);
             if (post == null)
             {
                 return NotFound();
@@ -129,32 +130,51 @@ namespace MyWritingPlatform.Controllers.Admin
             {
                 return NotFound();
             }
+            Post oldPost = _context.Posts.Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).FirstOrDefault(p => p.Id == post.Id);
+            post.Category = _context.Categories.First(c => c.Id == post.CategoryId);
+            post.User = oldPost.User;
+
+            if (ImgPostFile != null)
+            {
+
+                #region Обработка изображения
+
+                var wwwRootPath = _environment.WebRootPath; // URL - для сайта
+                var fileName = Path.GetRandomFileName().Replace('.', '_')
+                     + Path.GetExtension(ImgPostFile.FileName);
+                var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
+
+                post.ImgPost = "/storage/avatars/" + fileName; // ссылка на картинку
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await ImgPostFile.CopyToAsync(stream);
+                }
+
+                #endregion
+            }
+            else
+                post.ImgPost = oldPost.ImgPost;
+
+            bool oldCensor = post.Censor;
+            _context.Entry(post).State = EntityState.Detached;
+            await _context.SaveChangesAsync();
+            post = _context.Posts.Where(p => p.Id == id).Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).First();
+            List<Tag> oldTags = post.Tags;
+            post.Censor = oldCensor;
 
             if (ModelState.IsValid)
             {
-                if (ImgPostFile != null)
-                {
-
-                    #region Обработка изображения
-
-                    var wwwRootPath = _environment.WebRootPath; // URL - для сайта
-                    var fileName = Path.GetRandomFileName().Replace('.', '_')
-                         + Path.GetExtension(ImgPostFile.FileName);
-                    var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
-
-                    post.ImgPost = "/storage/avatars/" + fileName; // ссылка на картинку
-
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await ImgPostFile.CopyToAsync(stream);
-                    }
-
-                    #endregion
-                }
-
                 try
                 {
-                    post.Tags = _context.Tags.Where(t => tags.Contains(t.Id)).ToList();
+                    if (tags.Length != 0)
+                    {
+                        post.Tags = _context.Tags.Where(t => tags.Contains(t.Id)).ToList();
+                    }
+                    else
+                    {
+                        post.Tags = oldTags;
+                    }
                     _context.Update(post);
                     await _context.SaveChangesAsync();
                 }

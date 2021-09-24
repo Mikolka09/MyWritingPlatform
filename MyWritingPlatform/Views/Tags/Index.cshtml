@@ -45,7 +45,7 @@
                         @Html.DisplayFor(modelItem => item.Description)
                     </td>
                     <td>
-                        @if (item.Posts != null)
+                        @if (item.Posts.Count != 0)
                         {
                             <select class="form-select" required aria-label="select example">
                                 @foreach (var it in item.Posts)
