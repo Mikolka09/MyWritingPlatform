@@ -22,7 +22,7 @@
             <button class="btn btn-info dropdown-toggle" style="border-radius:8px;" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 Поиск по Тегу
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <ul id="tags" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                 <li><a class="dropdown-item" href="#">Действие</a></li>
                 <li><a class="dropdown-item" href="#">Другое действие</a></li>
                 <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
@@ -34,31 +34,32 @@
             <button class="btn btn-info dropdown-toggle" style="border-radius:8px;" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
                 Посик по Категории
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+            <ul id="categories" class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
                 <li><a class="dropdown-item" href="#">Действие</a></li>
                 <li><a class="dropdown-item" href="#">Другое действие</a></li>
                 <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
             </ul>
         </div>
     </div>
-</div><br />
+</div>
+<br />
 <!-- Main Content-->
 <div class="container px-4 px-lg-5">
     <div class="row gx-4 gx-lg-5 justify-content-center">
-        <div class="col-6">
+        <div id="block1" class="col-6">
             <!-- Post preview-->
             <div class="post-preview">
                 <a href="post.html">
-                    <img src="~/image/070638444.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
-                    <h2 class="post-title">Man must explore, and this is exploration at its greatest</h2>
-                    <h3 class="post-subtitle">Problems look mighty small from 150 miles up</h3>
+                    <img id="img1" src="~/image/070638444.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
+                    <h2 id="title1" class="post-title">Man must explore, and this is exploration at its greatest</h2>
+                    <h3 id="short1" class="post-subtitle">Problems look mighty small from 150 miles up</h3>
                 </a>
                 <p class="post-meta">
                     Опубликовано
-                    <a href="#!">Start Bootstrap</a>
+                    <a id="name1" href="#!">Start Bootstrap</a>
                     от
-                    <span id="date">24 сентября 2021 г.</span>
-                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment">10</span>
+                    <span id="date1">24 сентября 2021 г.</span>
+                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment1">10</span>
                 </p>
             </div>
             <!-- Divider-->
@@ -66,16 +67,16 @@
             <!-- Post preview-->
             <div class="post-preview">
                 <a href="post.html">
-                    <img src="~/image/0_e7ae3_d81b7d27_orig.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
-                    <h2 class="post-title">I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.</h2>
-                    <h3 class="post-subtitle">Problems look mighty small from 200 miles up</h3>
+                    <img id="img3" src="~/image/0_e7ae3_d81b7d27_orig.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
+                    <h2 id="title3" class="post-title">I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.</h2>
+                    <h3 id="short3" class="post-subtitle">Problems look mighty small from 200 miles up</h3>
                 </a>
                 <p class="post-meta">
                     Опубликовано
-                    <a href="#!">Start Bootstrap</a>
+                    <a id="name3" href="#!">Start Bootstrap</a>
                     от
-                    <span id="date">24 сентября 2021 г.</span>
-                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment">10</span>
+                    <span id="date3">24 сентября 2021 г.</span>
+                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment3">10</span>
                 </p>
             </div>
             <!-- Divider-->
@@ -83,16 +84,16 @@
             <!-- Post preview-->
             <div class="post-preview">
                 <a href="post.html">
-                    <img src="~/image/14ff85df1c57269926df3fd5f76f8eaf2ba311aa.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
-                    <h2 class="post-title">Science has not yet mastered prophecy</h2>
-                    <h3 class="post-subtitle">We predict too much for the next year and yet far too little for the next ten.</h3>
+                    <img id="img5" src="~/image/14ff85df1c57269926df3fd5f76f8eaf2ba311aa.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
+                    <h2 id="title5" class="post-title">Science has not yet mastered prophecy</h2>
+                    <h3 id="short5" class="post-subtitle">We predict too much for the next year and yet far too little for the next ten.</h3>
                 </a>
                 <p class="post-meta">
                     Опубликовано
-                    <a href="#!">Start Bootstrap</a>
+                    <a id="name5" href="#!">Start Bootstrap</a>
                     от
-                    <span id="date">24 сентября 2021 г.</span>
-                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment">10</span>
+                    <span id="date5">24 сентября 2021 г.</span>
+                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment5">10</span>
                 </p>
             </div>
             <!-- Divider-->
@@ -100,35 +101,35 @@
             <!-- Post preview-->
             <div class="post-preview">
                 <a href="post.html">
-                    <img src="~/image/070638444.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
-                    <h2 class="post-title">Failure is not an option</h2>
-                    <h3 class="post-subtitle">Many say exploration is part of our destiny, but it’s actually our duty to future generations.</h3>
+                    <img id="img7" src="~/image/070638444.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
+                    <h2 id="title7" class="post-title">Failure is not an option</h2>
+                    <h3 id="short7" class="post-subtitle">Many say exploration is part of our destiny, but it’s actually our duty to future generations.</h3>
                 </a>
                 <p class="post-meta">
                     Опубликовано
-                    <a href="#!">Start Bootstrap</a>
+                    <a id="name7" href="#!">Start Bootstrap</a>
                     от
-                    <span id="date">24 сентября 2021 г.</span>
-                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment">10</span>
+                    <span id="date7">24 сентября 2021 г.</span>
+                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment7">10</span>
                 </p>
             </div>
             <!-- Divider-->
             <hr class="my-4" />
         </div>
-        <div class="col-6">
+        <div id="block2" class="col-6">
             <!-- Post preview-->
             <div class="post-preview">
                 <a href="post.html">
-                    <img src="~/image/070638444.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
-                    <h2 class="post-title">Man must explore, and this is exploration at its greatest</h2>
-                    <h3 class="post-subtitle">Problems look mighty small from 150 miles up</h3>
+                    <img id="img2" src="~/image/070638444.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
+                    <h2 id="title2" class="post-title">Man must explore, and this is exploration at its greatest</h2>
+                    <h3 id="short2" class="post-subtitle">Problems look mighty small from 150 miles up</h3>
                 </a>
                 <p class="post-meta">
                     Опубликовано
-                    <a href="#!">Start Bootstrap</a>
+                    <a id="name2" href="#!">Start Bootstrap</a>
                     от
-                    <span id="date">24 сентября 2021 г.</span>
-                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment">10</span>
+                    <span id="date2">24 сентября 2021 г.</span>
+                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment2">10</span>
                 </p>
             </div>
             <!-- Divider-->
@@ -136,16 +137,16 @@
             <!-- Post preview-->
             <div class="post-preview">
                 <a href="post.html">
-                    <img src="~/image/0_e7ae3_d81b7d27_orig.jpg" style="border-radius: 20px; border: 2px solid #808080; width:100%;" />
-                    <h2 class="post-title">I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.</h2>
-                    <h3 class="post-subtitle">Problems look mighty small from 200 miles up</h3>
+                    <img id="img4" src="~/image/0_e7ae3_d81b7d27_orig.jpg" style="border-radius: 20px; border: 2px solid #808080; width:100%;" />
+                    <h2 id="title4" class="post-title">I believe every human has a finite number of heartbeats. I don't intend to waste any of mine.</h2>
+                    <h3 id="short4" class="post-subtitle">Problems look mighty small from 200 miles up</h3>
                 </a>
                 <p class="post-meta">
                     Опубликовано
-                    <a href="#!">Start Bootstrap</a>
+                    <a id="name4" href="#!">Start Bootstrap</a>
                     от
-                    <span id="date">24 сентября 2021 г.</span>
-                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment">10</span>
+                    <span id="date4">24 сентября 2021 г.</span>
+                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment4">10</span>
                 </p>
             </div>
             <!-- Divider-->
@@ -153,16 +154,16 @@
             <!-- Post preview-->
             <div class="post-preview">
                 <a href="post.html">
-                    <img src="~/image/14ff85df1c57269926df3fd5f76f8eaf2ba311aa.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
-                    <h2 class="post-title">Science has not yet mastered prophecy</h2>
-                    <h3 class="post-subtitle">We predict too much for the next year and yet far too little for the next ten.</h3>
+                    <img id="img6" src="~/image/14ff85df1c57269926df3fd5f76f8eaf2ba311aa.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
+                    <h2 id="title6" class="post-title">Science has not yet mastered prophecy</h2>
+                    <h3 id="short6" class="post-subtitle">We predict too much for the next year and yet far too little for the next ten.</h3>
                 </a>
                 <p class="post-meta">
                     Опубликовано
-                    <a href="#!">Start Bootstrap</a>
+                    <a id="name6" href="#!">Start Bootstrap</a>
                     от
-                    <span id="date">24 сентября 2021 г.</span>
-                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment">10</span>
+                    <span id="date6">24 сентября 2021 г.</span>
+                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment6">10</span>
                 </p>
             </div>
             <!-- Divider-->
@@ -170,16 +171,16 @@
             <!-- Post preview-->
             <div class="post-preview">
                 <a href="post.html">
-                    <img src="~/image/070638444.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
-                    <h2 class="post-title">Failure is not an option</h2>
-                    <h3 class="post-subtitle">Many say exploration is part of our destiny, but it’s actually our duty to future generations.</h3>
+                    <img id="img8" src="~/image/070638444.jpg" style="border-radius: 20px; border: 2px solid #808080; width: 100%;" />
+                    <h2 id="title8" class="post-title">Failure is not an option</h2>
+                    <h3 id="short8" class="post-subtitle">Many say exploration is part of our destiny, but it’s actually our duty to future generations.</h3>
                 </a>
                 <p class="post-meta">
                     Опубликовано
-                    <a href="#!">Start Bootstrap</a>
+                    <a id="name8" href="#!">Start Bootstrap</a>
                     от
-                    <span id="date">24 сентября 2021 г.</span>
-                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment">10</span>
+                    <span id="date8">24 сентября 2021 г.</span>
+                    <img src="~/image/comment-icon.png" style="width:25px; margin-left:5px; margin-right:5px;" /><span id="comment8">10</span>
                 </p>
             </div>
             <!-- Divider-->
@@ -187,10 +188,82 @@
         </div>
         <!-- Pager-->
         <div class="d-flex flex-row justify-content-between">
-            <div class="mb-4"><a class="btn btn-primary text-uppercase" style="border-radius:8px; visibility:hidden;" href="#!">← Newer Posts</a></div>
-            <div class="mb-4"><a class="btn btn-primary text-uppercase" style="border-radius:8px;" href="#!">Older Posts →</a></div>
+            <div id="newPost" class="mb-4"><a class="btn btn-primary text-uppercase" style="border-radius:8px; visibility:hidden;" href="#!">← Newer Posts</a></div>
+            <div id="oldPost"  class="mb-4"><a class="btn btn-primary text-uppercase" style="border-radius:8px;" href="#!">Older Posts →</a></div>
         </div>
-        
+
     </div>
 </div>
+
+<script>
+
+    //Заполняем списки тэгов и категорий
+    function addTagsCategories(json) {
+
+        let ulT = document.getElementById("tags");
+        ulT.innerHTML = "";
+        for (let i = 0; i < json[0].tags.length; i++) {
+            let li = document.createElement("li");
+            let a = document.createElement("a");
+            a.className = "dropdown-item";
+            a.value = json[0].tags[i].id;
+            a.innerText = json[0].tags[i].name;
+            a.href = "#";
+            li.appendChild(a);
+            ulT.appendChild(li);
+        }
+
+        let ulC = document.getElementById("categories");
+        ulC.innerHTML = "";
+        for (let i = 0; i < json[0].categories.length; i++) {
+            let li = document.createElement("li");
+            let a = document.createElement("a");
+            a.className = "dropdown-item";
+            a.value = json[0].categories[i].id;
+            a.innerText = json[0].categories[i].name;
+            a.href = "#";
+            li.appendChild(a);
+            ulC.appendChild(li);
+        }
+    }
+
+    //Заполняем страницу публикациями
+    function renderPostsList(json) {
+        console.log("Get From Server: ");
+        console.log(json);
+
+        addTagsCategories(json);
+
+        for (let i = 0; i < json.length; i++) {
+            if (i < 8 && json[i].censor == true) {
+                document.getElementById("img" + (i + 1)).src = json[i].imgPost;
+                document.getElementById("title" + (i + 1)).innerText = json[i].title;
+                document.getElementById("short" + (i + 1)).innerText = json[i].shortDescription;
+                document.getElementById("name" + (i + 1)).innerText = json[i].userName;
+                document.getElementById("date" + (i + 1)).innerText = json[i].published;
+                document.getElementById("comment" + (i + 1)).innerText = json[i].comCount;
+            }
+        }
+
+
+
+
+
+    }
+
+
+    // Выполнение запроса к серверу
+    function fetchGetPosts() {
+
+        fetch("/api/posts") // Пошлем запрос GET (по умолчанию) по марштуру на сервер
+            .then(response => response.json()) // Преобразуем ответ в json
+            .then(json => renderPostsList(json)) // Передадим данные в метод
+            .catch((ex) => { // обрабатываем возможную ошибку
+                console.log("Error: " + ex.message);
+                console.log("Response: " + ex.response);
+            });
+    }
+
+    fetchGetPosts();
+</script>
 

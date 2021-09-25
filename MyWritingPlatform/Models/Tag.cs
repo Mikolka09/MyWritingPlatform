@@ -23,7 +23,7 @@ namespace MyWritingPlatform.Models
         [Display(Name = "Пользователь")]
         public User User { get; set; }
 
-        [Display(Name = "Заголовки")]
+        [Display(Name = "Заголовки публикации")]
         public List<Post> Posts { get; set; }
     }
 }

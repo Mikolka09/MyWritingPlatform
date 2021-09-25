@@ -44,7 +44,7 @@ namespace MyWritingPlatform.Models
 
         [Display(Name = "Теги")]
         public List<Tag> Tags { get; set; }
-        public List<Comment> Сomments { get; set; }
+        public List<Comment> Comments { get; set; }
 
 
     }

@@ -121,7 +121,6 @@ namespace MyWritingPlatform.Controllers
             _context.Entry(tag).State = EntityState.Detached;
             await _context.SaveChangesAsync();
             tag = _context.Tags.Where(p => p.Id == id).Include(c => c.Posts).Include(c => c.User).First();
-            //List<Post> oldPosts = tag.Posts;
             tag.Name = oldName;
             tag.Description = oldDes;
 

@@ -27,12 +27,12 @@ namespace MyWritingPlatform.Controllers
             var currentUser = await _userManager.GetUserAsync(User);
             if (currentUser.Login == "Admin")
             {
-                var applicationDbContext = _context.Сomments.Include(c => c.Post).Include(c => c.User);
+                var applicationDbContext = _context.Comments.Include(c => c.Post).Include(c => c.User);
                 return View(await applicationDbContext.ToListAsync());
             }
             else
             {
-                var applicationDbContext = _context.Сomments.Include(c => c.Post).Include(c => c.User).Where(p => p.User.Id == currentUser.Id); ;
+                var applicationDbContext = _context.Comments.Include(c => c.Post).Include(c => c.User).Where(p => p.User.Id == currentUser.Id); ;
                 return View(await applicationDbContext.ToListAsync());
             }
         }
@@ -45,7 +45,7 @@ namespace MyWritingPlatform.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Сomments
+            var comment = await _context.Comments
                 .Include(c => c.Post)
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -87,7 +87,7 @@ namespace MyWritingPlatform.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Сomments.FindAsync(id);
+            var comment = await _context.Comments.FindAsync(id);
             if (comment == null)
             {
                 return NotFound();
@@ -107,7 +107,7 @@ namespace MyWritingPlatform.Controllers
                 return NotFound();
             }
 
-            comment.Published = _context.Сomments.FirstOrDefault(p => p.Id == id).Published;
+            comment.Published = _context.Comments.FirstOrDefault(p => p.Id == id).Published;
             if (ModelState.IsValid)
             {
                 try
@@ -139,7 +139,7 @@ namespace MyWritingPlatform.Controllers
                 return NotFound();
             }
 
-            var comment = await _context.Сomments
+            var comment = await _context.Comments
                 .Include(c => c.Post)
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -156,15 +156,15 @@ namespace MyWritingPlatform.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var comment = await _context.Сomments.FindAsync(id);
-            _context.Сomments.Remove(comment);
+            var comment = await _context.Comments.FindAsync(id);
+            _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CommentExists(int id)
         {
-            return _context.Сomments.Any(e => e.Id == id);
+            return _context.Comments.Any(e => e.Id == id);
         }
     }
 }
