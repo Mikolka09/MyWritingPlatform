@@ -73,6 +73,7 @@ namespace MyWritingPlatform.Controllers.Admin
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePost([Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,UserId,CategoryId")] Post post, int[] tags, IFormFile ImgPostFile)
         {
+            post.User = _context.Users.FirstOrDefault(p=>p.Login == "Admin");
             if (ModelState.IsValid)
             {
                 #region Обработка изображения
@@ -155,13 +156,18 @@ namespace MyWritingPlatform.Controllers.Admin
             }
             else
                 post.ImgPost = oldPost.ImgPost;
-
-            bool oldCensor = post.Censor;
+            Post newPost = post;
             _context.Entry(post).State = EntityState.Detached;
             await _context.SaveChangesAsync();
             post = _context.Posts.Where(p => p.Id == id).Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).First();
             List<Tag> oldTags = post.Tags;
-            post.Censor = oldCensor;
+            post.Censor = newPost.Censor;
+            post.ShortDescription = newPost.ShortDescription;
+            post.Description = newPost.Description;
+            post.Title = newPost.Title;
+            post.Published = newPost.Published;
+            post.CategoryId = newPost.CategoryId;
+            post.Category = newPost.Category;
 
             if (ModelState.IsValid)
             {

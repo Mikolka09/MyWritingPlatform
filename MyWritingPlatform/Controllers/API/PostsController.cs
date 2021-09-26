@@ -38,7 +38,7 @@ namespace MyWritingPlatform.Controllers.API
                     CategoryId = p.CategoryId,
                     Categories = _context.Categories.ToList(),
                     ComCount = _context.Comments.ToList().Count,
-                    Tags = p.Tags
+                    Tags = _context.Tags.ToList()
                 }).ToListAsync();
             return posts;
         }

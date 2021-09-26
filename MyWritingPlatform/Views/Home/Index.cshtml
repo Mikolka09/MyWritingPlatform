@@ -188,14 +188,30 @@
         </div>
         <!-- Pager-->
         <div class="d-flex flex-row justify-content-between">
-            <div id="newPost" class="mb-4"><a class="btn btn-primary text-uppercase" style="border-radius:8px; visibility:hidden;" href="#!">← Newer Posts</a></div>
-            <div id="oldPost"  class="mb-4"><a class="btn btn-primary text-uppercase" style="border-radius:8px;" href="#!">Older Posts →</a></div>
+            <div class="mb-4"><a id="newPost" class="btn btn-primary text-uppercase" style="border-radius:8px; visibility:hidden;" href="#!">← Newer Posts</a></div>
+            <div class="mb-4"><a id="oldPost" class="btn btn-primary text-uppercase" style="border-radius:8px;" href="#!">Older Posts →</a></div>
         </div>
 
     </div>
 </div>
 
 <script>
+
+    //Вывод публикаций согласно поиску
+    function findPostsList(json, tag) {
+        for (let i = 0; i < json.length; i++) {
+            if (i < 8 && json[i].censor == true) {
+                if (tag != null && json[i].tags.find(t => t.name == tag)) {
+                    document.getElementById("img" + (i + 1)).src = json[i].imgPost;
+                    document.getElementById("title" + (i + 1)).innerText = json[i].title;
+                    document.getElementById("short" + (i + 1)).innerText = json[i].shortDescription;
+                    document.getElementById("name" + (i + 1)).innerText = json[i].userName;
+                    document.getElementById("date" + (i + 1)).innerText = json[i].published;
+                    document.getElementById("comment" + (i + 1)).innerText = json[i].comCount;
+                }
+            }
+        }
+    }
 
     //Заполняем списки тэгов и категорий
     function addTagsCategories(json) {
@@ -208,7 +224,11 @@
             a.className = "dropdown-item";
             a.value = json[0].tags[i].id;
             a.innerText = json[0].tags[i].name;
-            a.href = "#";
+            a.style.cursor = "pointer";
+            a.onclick = function () {
+                let tag = json[0].tags.find(t => t.id == this.value).name;
+                findPostsList(json, tag);
+            };
             li.appendChild(a);
             ulT.appendChild(li);
         }
@@ -221,9 +241,75 @@
             a.className = "dropdown-item";
             a.value = json[0].categories[i].id;
             a.innerText = json[0].categories[i].name;
-            a.href = "#";
+            a.style.cursor = "pointer";
+            a.onclick = function () {
+                let tag = json[0].tags.find(t => t.id == this.value).name;
+                findPostsList(json, tag);
+            };
             li.appendChild(a);
             ulC.appendChild(li);
+        }
+    }
+
+    //Создание кода пуликаций
+    function createHtmlPosts(json) {
+        let block1 = document.getElementById("block1");
+        let block2 = document.getElementById("block2");
+        block1.innerHTML = "";
+        block2.innerHTML = "";
+
+        for (let i = 0; i < json.length; i++) {
+            if (json[i].censor == true) {
+                let div = document.createElement("div");
+                div.className = "post-preview";
+                let a1 = document.createElement("a");
+                a1.href = "post.html";
+                let img = document.createElement("img");
+                img.src = json[i].imgPost;
+                img.style = "border-radius: 20px; border: 2px solid #808080; width: 100%;";
+                a1.appendChild(img);
+                let h2 = document.createElement("h2");
+                h2.className = "post-title";
+                h2.innerText = json[i].title;
+                a1.appendChild(h2);
+                let h3 = document.createElement("h3");
+                h3.className = "post-subtitle";
+                h3.innerText = json[i].shortDescription;
+                a1.appendChild(h3);
+                let p = document.createElement("p");
+                p.className = "post-meta";
+                let span0 = document.createElement("span");
+                span0.innerText = " Опубликовано ";
+                let a2 = document.createElement("a");
+                a2.href = "#!";
+                a2.innerText = json[i].userName;
+                p.appendChild(span0);
+                p.appendChild(a2);
+                let span1 = document.createElement("span");
+                span1.innerText = " от " + json[i].published;
+                p.appendChild(span1);
+                let img1 = document.createElement("img");
+                img1.src = "/image/comment-icon.png";
+                img1.style = "width:25px; margin-left:5px; margin-right:5px;";
+                p.appendChild(img1);
+                let span2 = document.createElement("span");
+                span2.innerText = json[i].comCount;
+                p.appendChild(span2);
+                div.appendChild(a1);
+                div.appendChild(p);
+                if (i < 4) {
+                    block1.appendChild(div);
+                    let hr = document.createElement("hr");
+                    hr.className = "my-4";
+                    block1.appendChild(hr);
+                }
+                if (i > 3 && i < 8) {
+                    block2.appendChild(div);
+                    let hr = document.createElement("hr");
+                    hr.className = "my-4";
+                    block2.appendChild(hr);
+                }
+            }
         }
     }
 
@@ -232,21 +318,30 @@
         console.log("Get From Server: ");
         console.log(json);
 
-        addTagsCategories(json);
-
-        for (let i = 0; i < json.length; i++) {
-            if (i < 8 && json[i].censor == true) {
-                document.getElementById("img" + (i + 1)).src = json[i].imgPost;
-                document.getElementById("title" + (i + 1)).innerText = json[i].title;
-                document.getElementById("short" + (i + 1)).innerText = json[i].shortDescription;
-                document.getElementById("name" + (i + 1)).innerText = json[i].userName;
-                document.getElementById("date" + (i + 1)).innerText = json[i].published;
-                document.getElementById("comment" + (i + 1)).innerText = json[i].comCount;
-            }
+        //Разбить масив на части для вывода на печать
+        let size = 8; //размер подмассива
+        let subjson = []; //массив в который будет выведен результат.
+        for (let i = 0; i < Math.ceil(json.length / size); i++) {
+            subjson[i] = json.slice((i * size), (i * size) + size);
         }
+        console.log(subjson);
 
-
-
+        addTagsCategories(json);
+        let oldBtn = document.getElementById("oldPost");
+        let newBtn = document.getElementById("newPost");
+        let i = 0;
+        createHtmlPosts(subjson[i]);
+        oldBtn.onclick = function () {
+            i++;
+            newBtn.style.visibility = "visible";
+            createHtmlPosts(subjson[i]);
+        }
+        newBtn.onclick = function () {
+            i--;
+            if (i == 0)
+                newBtn.style.visibility = "hidden";
+            createHtmlPosts(subjson[i]);
+        }
 
 
     }
