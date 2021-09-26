@@ -36,9 +36,9 @@ namespace MyWritingPlatform.Controllers.API
                     Censor = p.Censor,
                     UserName = p.User.FirstName + " " + p.User.LastName,
                     CategoryId = p.CategoryId,
-                    CategoriesName = _context.Categories.Select(c=>c.Name).ToList(),
+                    CategoriesName = _context.Categories.Select(c => c.Name).ToList(),
                     ComCount = _context.Comments.ToList().Count,
-                    TagsName = _context.Tags.Select(t=>t.Name).ToList(),
+                    TagsName = _context.Tags.Select(t => t.Name).ToList(),
                     Tags = p.Tags,
                     Category = p.Category
                 }).ToListAsync();
@@ -47,9 +47,24 @@ namespace MyWritingPlatform.Controllers.API
 
         // GET: api/Posts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Post>> GetPost(int id)
+        public async Task<ActionResult<IEnumerable<PostsGetIdViewModel>>> GetPost(int id)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.Where(p => p.Id == id).Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).Include(p => p.Comments)
+                .Select(p => new PostsGetIdViewModel
+                {
+                    Id = p.Id,
+                    ImgPost = p.ImgPost,
+                    Title = p.Title,
+                    ShortDescription = p.ShortDescription,
+                    Description = p.Description,
+                    Published = p.Published.ToLongDateString(),
+                    Censor = p.Censor,
+                    UserName = p.User.FirstName + " " + p.User.LastName,
+                    CategoryId = p.CategoryId,
+                    Category = p.Category,
+                    Comments = p.Comments,
+                    User = p.User
+                }).ToListAsync();
 
             if (post == null)
             {
