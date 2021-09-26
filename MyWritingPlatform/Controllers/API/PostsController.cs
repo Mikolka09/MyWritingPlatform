@@ -36,9 +36,11 @@ namespace MyWritingPlatform.Controllers.API
                     Censor = p.Censor,
                     UserName = p.User.FirstName + " " + p.User.LastName,
                     CategoryId = p.CategoryId,
-                    Categories = _context.Categories.ToList(),
+                    CategoriesName = _context.Categories.Select(c=>c.Name).ToList(),
                     ComCount = _context.Comments.ToList().Count,
-                    Tags = _context.Tags.ToList()
+                    TagsName = _context.Tags.Select(t=>t.Name).ToList(),
+                    Tags = p.Tags,
+                    Category = p.Category
                 }).ToListAsync();
             return posts;
         }

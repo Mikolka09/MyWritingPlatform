@@ -197,20 +197,16 @@
 
 <script>
 
-    //Вывод публикаций согласно поиску
-    function findPostsList(json, tag) {
+    //Вывод публикаций согласно поиску по Тэгу
+    function findPostsTagsList(json, tag) {
+        let jsonTags = [];
         for (let i = 0; i < json.length; i++) {
-            if (i < 8 && json[i].censor == true) {
-                if (tag != null && json[i].tags.find(t => t.name == tag)) {
-                    document.getElementById("img" + (i + 1)).src = json[i].imgPost;
-                    document.getElementById("title" + (i + 1)).innerText = json[i].title;
-                    document.getElementById("short" + (i + 1)).innerText = json[i].shortDescription;
-                    document.getElementById("name" + (i + 1)).innerText = json[i].userName;
-                    document.getElementById("date" + (i + 1)).innerText = json[i].published;
-                    document.getElementById("comment" + (i + 1)).innerText = json[i].comCount;
-                }
+            for (let j = 0; j < json[i].tags.length; j++) {
+                if (json[i].tags[j].name == tag)
+                    jsonTags.push(json[i]);
             }
         }
+        renderPrintList(jsonTags);
     }
 
     //Заполняем списки тэгов и категорий
@@ -218,16 +214,15 @@
 
         let ulT = document.getElementById("tags");
         ulT.innerHTML = "";
-        for (let i = 0; i < json[0].tags.length; i++) {
+        for (let i = 0; i < json[0].tagsName.length; i++) {
             let li = document.createElement("li");
             let a = document.createElement("a");
             a.className = "dropdown-item";
-            a.value = json[0].tags[i].id;
-            a.innerText = json[0].tags[i].name;
+            a.value = json[0].tagsName[i];
+            a.innerText = json[0].tagsName[i];
             a.style.cursor = "pointer";
             a.onclick = function () {
-                let tag = json[0].tags.find(t => t.id == this.value).name;
-                findPostsList(json, tag);
+                findPostsTagsList(json, this.value);
             };
             li.appendChild(a);
             ulT.appendChild(li);
@@ -235,16 +230,15 @@
 
         let ulC = document.getElementById("categories");
         ulC.innerHTML = "";
-        for (let i = 0; i < json[0].categories.length; i++) {
+        for (let i = 0; i < json[0].categoriesName.length; i++) {
             let li = document.createElement("li");
             let a = document.createElement("a");
             a.className = "dropdown-item";
-            a.value = json[0].categories[i].id;
-            a.innerText = json[0].categories[i].name;
+            a.value = json[0].categoriesName[i];
+            a.innerText = json[0].categoriesName[i];
             a.style.cursor = "pointer";
             a.onclick = function () {
-                let tag = json[0].tags.find(t => t.id == this.value).name;
-                findPostsList(json, tag);
+                findPostsCategoryList(json, this.value);
             };
             li.appendChild(a);
             ulC.appendChild(li);
@@ -313,11 +307,8 @@
         }
     }
 
-    //Заполняем страницу публикациями
-    function renderPostsList(json) {
-        console.log("Get From Server: ");
-        console.log(json);
-
+    //Разбивка массива
+    function breakUpArray(json) {
         //Разбить масив на части для вывода на печать
         let size = 8; //размер подмассива
         let subjson = []; //массив в который будет выведен результат.
@@ -325,8 +316,13 @@
             subjson[i] = json.slice((i * size), (i * size) + size);
         }
         console.log(subjson);
+        return subjson;
+    }
 
-        addTagsCategories(json);
+    //Вывод публикаций
+    function renderPrintList(json) {
+        let subjson = breakUpArray(json);
+
         let oldBtn = document.getElementById("oldPost");
         let newBtn = document.getElementById("newPost");
         let i = 0;
@@ -343,7 +339,16 @@
             createHtmlPosts(subjson[i]);
         }
 
+    }
 
+    //Заполняем страницу публикациями
+    function renderPostsList(json) {
+        console.log("Get From Server: ");
+        console.log(json);
+
+        addTagsCategories(json);
+
+        renderPrintList(json);
     }
 
 
