@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyWritingPlatform.Data;
 using MyWritingPlatform.Models;
+using MyWritingPlatform.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers.API
 {
@@ -23,16 +23,28 @@ namespace MyWritingPlatform.Controllers.API
 
         // GET: api/Comments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Comment>>> GetСomments()
+        public async Task<ActionResult<IEnumerable<CommentsGetIdViewModel>>> GetСomments()
         {
-            return await _context.Comments.ToListAsync();
+            return await _context.Comments.Include(c => c.User).Select(c => new CommentsGetIdViewModel
+            {
+                Id = c.Id,
+                Description = c.Description,
+                Published = c.Published.ToLongDateString(),
+                User = c.User
+            }).ToListAsync();
         }
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Comment>> GetComment(int id)
+        public async Task<ActionResult<CommentsGetIdViewModel>> GetComment(int id)
         {
-            var comment = await _context.Comments.FindAsync(id);
+            var comment = await _context.Comments.Include(c => c.User).Select(c=> new CommentsGetIdViewModel
+            {
+                Id = c.Id,
+                Description = c.Description,
+                Published = c.Published.ToLongDateString(),
+                User = c.User
+            }).FirstOrDefaultAsync(p => p.Id == id);
 
             if (comment == null)
             {
@@ -76,9 +88,18 @@ namespace MyWritingPlatform.Controllers.API
         // POST: api/Comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Comment>> PostComment(Comment comment)
+        public async Task<ActionResult<Comment>> PostComment(CommentsPostIdViewModel com)
         {
-            _context.Comments.Add(comment);
+            Post post = _context.Posts.Include(p => p.User).Include(p => p.Comments).FirstOrDefault(p => p.Id == com.PostId);
+            Comment comment = new Comment
+            {
+                Id = post.Comments.Count + 1,
+                Description = com.Description,
+                Published = DateTime.Now,
+                User = _context.Users.FirstOrDefault(p => p.Id == com.UserUpId),
+                Post = post
+            };
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetComment", new { id = comment.Id }, comment);

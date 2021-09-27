@@ -12,7 +12,6 @@ namespace MyWritingPlatform.ViewModels
   
         public int Id { get; set; }
 
-
         public string ImgPost { get; set; }
 
         public string Title { get; set; }
