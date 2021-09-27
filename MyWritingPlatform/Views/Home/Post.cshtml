@@ -129,7 +129,7 @@
     function serverResponseAddComment(res) {
         console.log("Response Add Comment: ");
         console.log(res);
-        createComments(res);
+        fetchGetComment();;
     }
 
     //Построение вывода комментарий
@@ -209,6 +209,18 @@
             document.getElementById("comments").value = "";
         }
 
+    }
+
+    // Выполнение запроса к серверу
+    function fetchGetComment() {
+        console.log(data);
+        fetch("/api/posts/") // Пошлем запрос GET (по умолчанию) по марштуру на сервер
+            .then(response => response.json()) // Преобразуем ответ в json
+            .then(json => createComments(json)) // Передадим данные в метод
+            .catch((ex) => { // обрабатываем возможную ошибку
+                console.log("Error: " + ex.message);
+                console.log("Response: " + ex.response);
+            });
     }
 
 
