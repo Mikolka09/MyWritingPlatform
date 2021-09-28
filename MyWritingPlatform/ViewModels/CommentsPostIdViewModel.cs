@@ -7,14 +7,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MyWritingPlatform.ViewModels
 {
-    public class CommentsPostIdViewModel
-    {
-        public int Id { get; set; }
-
+    public class CommentsPostIdViewModel: Comment
+    {    
         public int PostId { get; set; }
-
-        public string Description { get; set; }
-
+            
         public string UserUpId { get; set; }
 
     }

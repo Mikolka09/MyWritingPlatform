@@ -57,7 +57,22 @@ namespace MyWritingPlatform.Controllers.API
         public async Task<ActionResult<IEnumerable<PostsGetIdViewModel>>> GetPost(int id)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            var post = await _context.Posts.Where(p => p.Id == id).Include(p => p.Category).Include(p => p.User).Include(p => p.Comments)
+            var comm = _context.Comments.Include(c=>c.User).Include(c=>c.Post).Where(c=>c.Post.Id == id).OrderByDescending(p=>p.Published).ToList();
+            List<CommentViewModel> commentViewModels = new List<CommentViewModel>();
+            foreach (var it in comm)
+            {
+                CommentViewModel commentView = new CommentViewModel
+                {
+                    Id = it.Id,
+                    Description = it.Description,
+                    Published = it.Published.ToLongDateString(),
+                    Avatar = it.User.Avatar,
+                    UserName = it.User.FirstName + " " + it.User.LastName
+                };
+                commentViewModels.Add(commentView);
+            }
+            
+            var post = await _context.Posts.Where(p => p.Id == id).Include(p => p.User).Include(p => p.Comments)
                 .Select(p => new PostsGetIdViewModel
                 {
                     Id = p.Id,
@@ -69,10 +84,7 @@ namespace MyWritingPlatform.Controllers.API
                     Published = p.Published.ToLongDateString(),
                     Censor = p.Censor,
                     UserName = p.User.FirstName + " " + p.User.LastName,
-                    CategoryId = p.CategoryId,
-                    Category = p.Category,
-                    Comments = p.Comments,
-                    User = p.User
+                    Comments = commentViewModels
                 }).ToListAsync();
 
             if (post == null)

@@ -12,16 +12,20 @@ using MyWritingPlatform.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MyWritingPlatform
 {
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
+
 
         public IConfiguration Configuration { get; }
 
@@ -38,6 +42,7 @@ namespace MyWritingPlatform
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

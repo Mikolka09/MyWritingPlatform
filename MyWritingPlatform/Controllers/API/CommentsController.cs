@@ -19,32 +19,21 @@ namespace MyWritingPlatform.Controllers.API
         public CommentsController(ApplicationDbContext context)
         {
             _context = context;
+
         }
 
         // GET: api/Comments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CommentsGetIdViewModel>>> GetСomments()
+        public async Task<ActionResult<IEnumerable<Comment>>> GetСomments()
         {
-            return await _context.Comments.Include(c => c.User).Select(c => new CommentsGetIdViewModel
-            {
-                Id = c.Id,
-                Description = c.Description,
-                Published = c.Published.ToLongDateString(),
-                User = c.User
-            }).ToListAsync();
+            return await _context.Comments.ToListAsync();
         }
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CommentsGetIdViewModel>> GetComment(int id)
+        public async Task<ActionResult<Comment>> GetComment(int id)
         {
-            var comment = await _context.Comments.Include(c => c.User).Select(c=> new CommentsGetIdViewModel
-            {
-                Id = c.Id,
-                Description = c.Description,
-                Published = c.Published.ToLongDateString(),
-                User = c.User
-            }).FirstOrDefaultAsync(p => p.Id == id);
+            var comment = await _context.Comments.FirstOrDefaultAsync(p => p.Id == id);
 
             if (comment == null)
             {
@@ -88,18 +77,20 @@ namespace MyWritingPlatform.Controllers.API
         // POST: api/Comments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Comment>> PostComment(CommentsPostIdViewModel com)
+        public async Task<ActionResult<Comment>> PostComment(CommentsPostIdViewModel comm)
         {
-            Post post = _context.Posts.Include(p => p.User).Include(p => p.Comments).FirstOrDefault(p => p.Id == com.PostId);
+            comm.Post = _context.Posts.FirstOrDefault(p => p.Id == comm.PostId);
+            comm.User = _context.Users.FirstOrDefault(p => p.Id == comm.UserUpId);
+            comm.Published = DateTime.Now;
             Comment comment = new Comment
             {
-                Id = post.Comments.Count + 1,
-                Description = com.Description,
-                Published = DateTime.Now,
-                User = _context.Users.FirstOrDefault(p => p.Id == com.UserUpId),
-                Post = post
+                Id = comm.Id,
+                Description = comm.Description,
+                Published = comm.Published,
+                User = comm.User,
+                Post = comm.Post
             };
-
+            _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetComment", new { id = comment.Id }, comment);

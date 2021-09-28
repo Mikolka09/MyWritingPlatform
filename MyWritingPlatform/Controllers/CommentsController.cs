@@ -107,7 +107,19 @@ namespace MyWritingPlatform.Controllers
                 return NotFound();
             }
 
-            comment.Published = _context.Comments.FirstOrDefault(p => p.Id == id).Published;
+           Comment commentNew = comment;
+
+            commentNew.Published = _context.Comments.FirstOrDefault(p => p.Id == id).Published;
+            commentNew.User = _context.Comments.Include(c=>c.User).FirstOrDefault(p => p.Id == id).User;
+            commentNew.Post = _context.Comments.Include(c => c.Post).FirstOrDefault(p => p.Id == id).Post;
+            _context.Entry(comment).State = EntityState.Detached;
+            await _context.SaveChangesAsync();
+            comment = _context.Comments.Where(p => p.Id == id).Include(c=>c.User).Include(c=>c.Post).First();
+            comment.Published = commentNew.Published;
+            comment.Description = commentNew.Description;
+            comment.Post = commentNew.Post;
+            comment.User = comment.User;
+
             if (ModelState.IsValid)
             {
                 try
