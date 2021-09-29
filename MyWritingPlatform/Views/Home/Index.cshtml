@@ -46,7 +46,6 @@
 <!-- Main Content-->
 <div class="container px-4 px-lg-5">
     <div id="block1" class="row row-cols-2 gx-4 gx-lg-5 justify-content-center">
-        
     </div>
     <!-- Pager-->
     <div class="d-flex flex-row justify-content-between">
@@ -55,8 +54,7 @@
     </div>
 </div>
 
-<script>
-
+<script type="text/javascript">
     //Вывод публикаций согласно поиску по Тэгу
     function findPostsTagsList(json, tag) {
         let jsonTags = [];
@@ -118,10 +116,13 @@
 
     //Создание кода пуликаций
     function createHtmlPosts(json) {
+        console.log(json);
         let block1 = document.getElementById("block1");
-        block1.innerHTML = "";
+        while (block1.firstChild) {
+            block1.removeChild(block1.firstChild);
+        }
 
-        for (let i = 0; i < json.   length; i++) {
+        for (let i = 0; i < json.length; i++) {
             if (json[i].censor == true) {
                 let divH = document.createElement("div");
                 divH.className = "col";
@@ -212,7 +213,7 @@
 
     //Заполняем страницу публикациями
     function renderPostsList(json) {
-       // console.log("Get From Server: ");
+        // console.log("Get From Server: ");
         //console.log(json);
 
         addTagsCategories(json);
@@ -235,4 +236,3 @@
 
     fetchGetPosts();
 </script>
-

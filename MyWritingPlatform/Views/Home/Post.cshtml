@@ -194,26 +194,25 @@
             console.log("New Comment:");
             console.log(newComment);
 
-            fetch("/api/Comments/", {
+            fetch("/api/comments/", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(newComment)
             })
-                .then(response => response.text())
-                .then(text => console.log(text))
+                .then(response => response.json())
+                .then(json => serverResponseAddComment(json))
                 .catch((ex) => { // обрабатываем возможную ошибку
                     console.log("Error: " + ex.message);
                     console.log("Response: " + ex.response);
                 });
             document.getElementById("comments").value = "";
-            fetchGetPost();
         }
 
     }
 
-   
+
     // Выполнение запроса к серверу
     function fetchGetPost() {
         var data = sessionStorage.getItem('post');

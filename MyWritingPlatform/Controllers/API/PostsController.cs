@@ -30,7 +30,7 @@ namespace MyWritingPlatform.Controllers.API
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostsViewModel>>> GetPosts()
         {
-            var posts =  await _context.Posts.Include(p => p.Category).Include(p => p.Tags).Include(p => p.User)
+            var posts =  await _context.Posts.Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).Include(p => p.Comments)
                 .OrderByDescending(p => p.Published).Select(p => new PostsViewModel
                 {
                     Id = p.Id,
@@ -44,7 +44,7 @@ namespace MyWritingPlatform.Controllers.API
                     UserName = p.User.FirstName + " " + p.User.LastName,
                     CategoryId = p.CategoryId,
                     CategoriesName = _context.Categories.Select(c => c.Name).ToList(),
-                    ComCount = _context.Comments.ToList().Count,
+                    ComCount = p.Comments.Count,
                     TagsName = _context.Tags.Select(t => t.Name).ToList(),
                     Tags = p.Tags,
                     Category = p.Category

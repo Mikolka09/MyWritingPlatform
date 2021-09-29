@@ -31,9 +31,17 @@ namespace MyWritingPlatform.Controllers.API
 
         // GET: api/Comments/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Comment>> GetComment(int id)
+        public async Task<ActionResult<CommentsGetIdViewModel>> GetComment(int id)
         {
-            var comment = await _context.Comments.FirstOrDefaultAsync(p => p.Id == id);
+            var com = await _context.Comments.Include(c=>c.User).FirstOrDefaultAsync(p => p.Id == id);
+
+            CommentsGetIdViewModel comment = new CommentsGetIdViewModel
+            {
+                Id = com.Id,
+                Description = com.Description,
+                User = com.User,
+                Published = com.Published.ToLongDateString()
+            };
 
             if (comment == null)
             {
@@ -79,21 +87,19 @@ namespace MyWritingPlatform.Controllers.API
         [HttpPost]
         public async Task<ActionResult<Comment>> PostComment(CommentsPostIdViewModel comm)
         {
-            comm.Post = _context.Posts.FirstOrDefault(p => p.Id == comm.PostId);
-            comm.User = _context.Users.FirstOrDefault(p => p.Id == comm.UserUpId);
-            comm.Published = DateTime.Now;
+
             Comment comment = new Comment
             {
                 Id = comm.Id,
                 Description = comm.Description,
-                Published = comm.Published,
-                User = comm.User,
-                Post = comm.Post
+                Published = DateTime.Now,
+                User = _context.Users.FirstOrDefault(p => p.Id == comm.UserUpId),
+                Post = _context.Posts.FirstOrDefault(p => p.Id == comm.PostId)
             };
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetComment", new { id = comment.Id }, comment);
+            return CreatedAtRoute("GetComment", new { id = comment.Id }, comment);
         }
 
         // DELETE: api/Comments/5
