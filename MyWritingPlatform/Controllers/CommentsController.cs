@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyWritingPlatform.Data;
@@ -8,23 +9,26 @@ using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers
 {
+    [Authorize]
     public class CommentsController : Controller
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ApplicationDbContext _context;
 
-        public CommentsController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext context)
+        public CommentsController(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _context = context;
         }
 
         // GET: Comments
         public async Task<IActionResult> Index()
         {
-            var currentUser = await _userManager.GetUserAsync(User);
+            var currentUser = await _userManager. GetUserAsync(User);
             if (currentUser.Login == "Admin")
             {
                 var applicationDbContext = _context.Comments.Include(c => c.Post).Include(c => c.User);

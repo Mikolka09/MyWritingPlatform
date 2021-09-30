@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private readonly UserManager<User> _userManager;

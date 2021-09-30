@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyWritingPlatform.Data;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace MyWritingPlatform.Controllers
 {
+    [Authorize]
     public class TagsController : Controller
     {
         private readonly UserManager<User> _userManager;

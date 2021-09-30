@@ -15,7 +15,7 @@ using System;
 
 namespace MyWritingPlatform.Controllers.Admin
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Moderator")]
     public class AdminDashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,6 +27,7 @@ namespace MyWritingPlatform.Controllers.Admin
             _environment = environment;
         }
 
+        [Authorize(Roles = "Admin, Moderator")]
         public IActionResult Index()
         {
             return View("~/Views/Admin/Index.cshtml");
@@ -40,6 +41,7 @@ namespace MyWritingPlatform.Controllers.Admin
         }
 
         // GET: Posts/Details/5
+        [Authorize(Roles = "Admin, Moderator")]
         public async Task<IActionResult> DetailsPost(int? id)
         {
             if (id == null)
@@ -61,6 +63,7 @@ namespace MyWritingPlatform.Controllers.Admin
         }
 
         // GET: Posts/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult CreatePost()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
@@ -71,6 +74,7 @@ namespace MyWritingPlatform.Controllers.Admin
         // POST: Posts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePost([Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,UserId,CategoryId")] Post post, int[] tags, IFormFile ImgPostFile)
@@ -140,6 +144,7 @@ namespace MyWritingPlatform.Controllers.Admin
         }
 
         // GET: Posts/Edit/5
+        [Authorize(Roles = "Admin, Moderator")]
         public async Task<IActionResult> EditPost(int? id)
         {
             if (id == null)
@@ -160,6 +165,7 @@ namespace MyWritingPlatform.Controllers.Admin
         // POST: Posts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Moderator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(int id, [Bind("Id,ImgPost,Title,ShortDescription,Description,Published,Censor,CategoryId")] Post post, int[] tags, IFormFile ImgPostFile)
@@ -276,6 +282,7 @@ namespace MyWritingPlatform.Controllers.Admin
         }
 
         // GET: Posts/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeletePost(int? id)
         {
             if (id == null)
@@ -297,6 +304,7 @@ namespace MyWritingPlatform.Controllers.Admin
         }
 
         // POST: Posts/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("DeletePost")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
