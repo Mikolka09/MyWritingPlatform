@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using MyWritingPlatform.Models;
 using MyWritingPlatform.ViewModels;
 using System.IO;
+using System.Drawing;
 using System.Threading.Tasks;
+using System;
 
 namespace MyWritingPlatform.Controllers
 {
@@ -140,6 +142,41 @@ namespace MyWritingPlatform.Controllers
                         {
                             await AvatarFile.CopyToAsync(stream);
                         }
+
+                        //Изменяем размер картинки
+                        byte[] imgB = System.IO.File.ReadAllBytes(filePath);
+
+                        using (MemoryStream ms = new MemoryStream(imgB, 0, imgB.Length))
+                        {
+                            using (Image img = Image.FromStream(ms))
+                            {
+                                int h = 0;
+                                int w = 0;
+                                if (img.Width > 512)
+                                {
+                                    int changeSize = 100 - (Math.Abs(img.Width - 512) / (img.Width / 100));
+
+                                    h = (img.Height / 100) * changeSize;
+                                    w = (img.Width / 100) * changeSize;
+                                }
+                                else
+                                {
+                                    h = img.Height;
+                                    w = img.Width;
+                                }
+
+                                using (Bitmap b = new Bitmap(img, new Size(w, h)))
+                                {
+                                    using (MemoryStream ms2 = new MemoryStream())
+                                    {
+                                        b.Save(ms2, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                        imgB = ms2.ToArray();
+                                    }
+                                }
+                            }
+                        }
+
+                        System.IO.File.WriteAllBytes(filePath, imgB);
 
                         #endregion
                     }

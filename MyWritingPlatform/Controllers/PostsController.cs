@@ -8,6 +8,7 @@ using MyWritingPlatform.Data;
 using MyWritingPlatform.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -84,16 +85,52 @@ namespace MyWritingPlatform.Controllers
                 var wwwRootPath = _environment.WebRootPath; // URL - для сайта
                 var fileName = Path.GetRandomFileName().Replace('.', '_')
                      + Path.GetExtension(ImgPostFile.FileName);
-                var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
+                var filePath = Path.Combine(wwwRootPath + "\\storage\\posts\\", fileName); // Реальный путь 
 
-                post.ImgPost = "/storage/avatars/" + fileName; // ссылка на картинку
+                post.ImgPost = "/storage/posts/" + fileName; // ссылка на картинку
 
                 using (var stream = System.IO.File.Create(filePath))
                 {
                     await ImgPostFile.CopyToAsync(stream);
                 }
 
+                //Изменяем размер картинки
+                byte[] imgB = System.IO.File.ReadAllBytes(filePath);
+
+                using (MemoryStream ms = new MemoryStream(imgB, 0, imgB.Length))
+                {
+                    using (Image img = Image.FromStream(ms))
+                    {
+                        int h = 0;
+                        int w = 0;
+                        if (img.Width > 768)
+                        {
+                            int changeSize = 100 - (Math.Abs(img.Width - 768) / (img.Width / 100));
+
+                            h = (img.Height / 100) * changeSize;
+                            w = (img.Width / 100) * changeSize;
+                        }
+                        else
+                        {
+                            h = img.Height;
+                            w = img.Width;
+                        }
+
+                        using (Bitmap b = new Bitmap(img, new Size(w, h)))
+                        {
+                            using (MemoryStream ms2 = new MemoryStream())
+                            {
+                                b.Save(ms2, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                imgB = ms2.ToArray();
+                            }
+                        }
+                    }
+                }
+
+                System.IO.File.WriteAllBytes(filePath, imgB);
+
                 #endregion
+
                 post.Tags = _context.Tags.Where(t => tags.Contains(t.Id)).ToList();
                 _context.Add(post);
                 await _context.SaveChangesAsync();
@@ -150,14 +187,49 @@ namespace MyWritingPlatform.Controllers
                 var wwwRootPath = _environment.WebRootPath; // URL - для сайта
                 var fileName = Path.GetRandomFileName().Replace('.', '_')
                      + Path.GetExtension(ImgPostFile.FileName);
-                var filePath = Path.Combine(wwwRootPath + "\\storage\\avatars\\", fileName); // Реальный путь 
+                var filePath = Path.Combine(wwwRootPath + "\\storage\\posts\\", fileName); // Реальный путь 
 
-                post.ImgPost = "/storage/avatars/" + fileName; // ссылка на картинку
+                post.ImgPost = "/storage/posts/" + fileName; // ссылка на картинку
 
                 using (var stream = System.IO.File.Create(filePath))
                 {
                     await ImgPostFile.CopyToAsync(stream);
                 }
+
+                //Изменяем размер картинки
+                byte[] imgB = System.IO.File.ReadAllBytes(filePath);
+
+                using (MemoryStream ms = new MemoryStream(imgB, 0, imgB.Length))
+                {
+                    using (Image img = Image.FromStream(ms))
+                    {
+                        int h = 0;
+                        int w = 0;
+                        if (img.Width > 768)
+                        {
+                            int changeSize = 100 - (Math.Abs(img.Width - 768) / (img.Width / 100));
+
+                            h = (img.Height / 100) * changeSize;
+                            w = (img.Width / 100) * changeSize;
+                        }
+                        else
+                        {
+                            h = img.Height;
+                            w = img.Width;
+                        }
+
+                        using (Bitmap b = new Bitmap(img, new Size(w, h)))
+                        {
+                            using (MemoryStream ms2 = new MemoryStream())
+                            {
+                                b.Save(ms2, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                imgB = ms2.ToArray();
+                            }
+                        }
+                    }
+                }
+
+                System.IO.File.WriteAllBytes(filePath, imgB);
 
                 #endregion
             }
@@ -169,6 +241,7 @@ namespace MyWritingPlatform.Controllers
             await _context.SaveChangesAsync();
             post = _context.Posts.Where(p => p.Id == id).Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).First();
             List<Tag> oldTags = post.Tags;
+            post.ImgPost = newPost.ImgPost;
             post.Censor = newPost.Censor;
             post.ShortDescription = newPost.ShortDescription;
             post.Description = newPost.Description;
