@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using MyWritingPlatform.Data;
 using MyWritingPlatform.Models;
 using MyWritingPlatform.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +29,7 @@ namespace MyWritingPlatform.Controllers.API
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PostsViewModel>>> GetPosts()
         {
-            var posts =  await _context.Posts.Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).Include(p => p.Comments)
+            var posts = await _context.Posts.Include(p => p.Category).Include(p => p.Tags).Include(p => p.User).Include(p => p.Comments)
                 .OrderByDescending(p => p.Published).Select(p => new PostsViewModel
                 {
                     Id = p.Id,
@@ -57,7 +56,7 @@ namespace MyWritingPlatform.Controllers.API
         public async Task<ActionResult<IEnumerable<PostsGetIdViewModel>>> GetPost(int id)
         {
             var currentUser = await _userManager.GetUserAsync(User);
-            var comm = _context.Comments.Include(c=>c.User).Include(c=>c.Post).Where(c=>c.Post.Id == id).OrderByDescending(p=>p.Published).ToList();
+            var comm = _context.Comments.Include(c => c.User).Include(c => c.Post).Where(c => c.Post.Id == id).OrderByDescending(p => p.Published).ToList();
             List<CommentViewModel> commentViewModels = new List<CommentViewModel>();
             foreach (var it in comm)
             {
@@ -71,12 +70,12 @@ namespace MyWritingPlatform.Controllers.API
                 };
                 commentViewModels.Add(commentView);
             }
-            
+
             var post = await _context.Posts.Where(p => p.Id == id).Include(p => p.User).Include(p => p.Comments)
                 .Select(p => new PostsGetIdViewModel
                 {
                     Id = p.Id,
-                    UserUpId = currentUser.Id,
+                    UserUpId = currentUser == null ? "0" : currentUser.Id,
                     ImgPost = p.ImgPost,
                     Title = p.Title,
                     ShortDescription = p.ShortDescription,

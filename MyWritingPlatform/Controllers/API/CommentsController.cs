@@ -99,7 +99,7 @@ namespace MyWritingPlatform.Controllers.API
             _context.Comments.Add(comment);
             await _context.SaveChangesAsync();
 
-            return CreatedAtRoute("GetComment", new { id = comment.Id }, comment);
+            return StatusCode(201);
         }
 
         // DELETE: api/Comments/5

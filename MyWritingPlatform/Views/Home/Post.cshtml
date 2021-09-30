@@ -185,29 +185,40 @@
         document.getElementById("text").innerText = json[0].description;
         createComments(json[0].comments);
         document.getElementById("btn").onclick = function () {
-            let newComment = {
-                id: 0,
-                postId: json[0].id,
-                description: document.getElementById("comments").value,
-                userUpId: json[0].userUpId,
-            };
-            console.log("New Comment:");
-            console.log(newComment);
+            if (json[0].userUpId === "0") {
+                alert("Коментарий может оставить только зарегестрированный пользователь! Зайдите в свой аккаунт!")
+                document.getElementById("comments").value = "";
+            }
+            else {
 
-            fetch("/api/comments/", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newComment)
-            })
-                .then(response => response.json())
-                .then(json => serverResponseAddComment(json))
-                .catch((ex) => { // обрабатываем возможную ошибку
-                    console.log("Error: " + ex.message);
-                    console.log("Response: " + ex.response);
-                });
-            document.getElementById("comments").value = "";
+                let newComment = {
+                    id: 0,
+                    postId: json[0].id,
+                    description: document.getElementById("comments").value,
+                    userUpId: json[0].userUpId,
+                };
+                console.log("New Comment:");
+                console.log(newComment);
+
+                fetch("/api/comments/", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(newComment)
+                })
+                    .then(function (response) {
+                        if (response.status == 201) {
+                            fetchGetPost();
+                            console.log(response.status);
+                        }
+                    })
+                    .catch((ex) => { // обрабатываем возможную ошибку
+                        console.log("Error: " + ex.message);
+                        console.log("Response: " + ex.response);
+                    });
+                document.getElementById("comments").value = "";
+            }
         }
 
     }
